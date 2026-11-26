@@ -181,7 +181,7 @@ class Hud {
         float yArma = 40 + 26 * partida.arsenal().size();
         for (Arma a : partida.arsenal()) {
             for (int k = 0; k < a.nivelMaximo(); k++) {
-                float px = 232 + k * 15;
+                float px = 252 + k * 15;
                 float py = yArma - 8;
                 f.setColor(0, 0, 0, 0.6f);
                 f.circle(px, py, 6, 12);
