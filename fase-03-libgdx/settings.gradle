@@ -1,0 +1,4 @@
+rootProject.name = 'missao-marte-sobrevivencia'
+
+include 'core'
+include 'lwjgl3'
