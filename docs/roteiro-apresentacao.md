@@ -15,8 +15,8 @@
 | 6:00–8:00 | Conta online: criar conta, jogar, ranking global; Swagger com `/api/ranking` | "Cliente e servidor independentes; JWT validado no Spring Security; DTOs." |
 | 8:00–9:30 | Desligar o servidor e mostrar que o jogo continua (convidado/local) | "Requisições assíncronas com `Gdx.net`; falha não trava o jogo." |
 | 9:30–11:00 | APK em Releases / código do `AndroidLauncher` e `ControleToque` | "O core é o mesmo no desktop e no Android; só muda o ponto de entrada." |
-| 11:00–12:30 | Testes: `gradlew test` + aba Actions (Java 17 e 26, ponta a ponta, capturas) | "70 testes; o domínio é testado sem abrir janela." |
-| 12:30–14:00 | Fase 7: chefe mirando (faixa vermelha) → investida → anel | "Melhoria via Strategy/State e eventos, com testes." |
+| 11:00–12:30 | Testes: `gradlew test` + aba Actions (Java 17 e 26, ponta a ponta, capturas) | "Mais de 80 testes; o domínio é testado sem abrir janela." |
+| 12:30–14:00 | Fase 7: cartas (níveis, raridade), carta cruel, chefe mirando → investida → anel | "Evoluções = arma nível 5 + passiva certa (enum `Evolucao`); Strategy/State e eventos, com testes." |
 
 ## Respostas às perguntas do professor
 

@@ -19,7 +19,7 @@ professor; o núcleo do original foi mantido (passageiros, plataforma, vidas/pon
 | 4 | Menu 3D, fontes TTF, sons, HUD, ranking local, pós-processamento (bloom) |
 | 5 | Servidor Spring Boot (JWT, BCrypt, JPA/H2, DTOs) + cliente online assíncrono |
 | 6 | Módulo Android, joystick virtual, APK gerado no CI |
-| 7 | Raridade de upgrades, poder especial (Investida), chefe com padrões de ataque |
+| 7 | Cartas com níveis 1–5 e raridade, 2 armas e 3 passivas novas, 5 cartas cruéis (evoluções), Investida, chefe com padrões de ataque |
 
 ## 2. Arquitetura e decisões técnicas
 
@@ -61,6 +61,7 @@ em `create()` e liberados em `dispose()`, respeitando o ciclo de vida da libGDX.
 | DIP | `RepositorioRanking` (arquivo local ↔ servidor), `ServicoOnline` (HTTP ↔ dublê), `GeradorOndas`/`CronogramaPassageiros` injetados | Trocar implementação e testar sem rede/disco/sorteio |
 | Strategy | `Arma` (tiro, orbital, onda), `PoderEspecial` (Investida) | Comportamentos intercambiáveis |
 | State | `ComportamentoChefe` (perseguir → mirar → investir → anel) | Padrão do chefe isolado e testável |
+| Template (classe base) | `ArmaBase` concentra nível e evolução; cada arma só define o ataque | Sem repetição; arma nova é pequena |
 | GRASP Creator / Information Expert | `GeradorMissao`/`GeradorOndas` criam entidades; `Missao`/`Arena` respondem sobre o mapa | Responsabilidade onde está a informação |
 | Controller (GRASP) | `TelaJogo` coordena entrada → domínio → desenho | Interface sem regra de negócio |
 
@@ -72,7 +73,7 @@ em `create()` e liberados em `dispose()`, respeitando o ciclo de vida da libGDX.
 | Domínio sobrevivência | 17 | movimento/arena, perseguição, tiro, XP e nível (pausa), ímã, bônus e capacidade de passageiros, plataforma, vitória, derrota, orbital, limites de arma, ondas, cronograma |
 | Ranking local | 4 | top 10, ordenação, normalização, partida em andamento |
 | Conta online | 5 | convidado, cadastro+login, falha, servidor fora do ar, token expirado |
-| Fase 7 | 9 | pesos e efeito da raridade, arma épica, Investida (deslocamento, recarga, dano, invulnerabilidade), ciclo do chefe, anéis |
+| Fase 7 | 20 | raridade (pesos/efeito), Investida, ciclo do chefe e anéis; cartas: passivas até nível 5, armadura, crítico, área, mísseis, raio em cadeia, cartas cruéis (disponibilidade, garantia nas opções, evolução única, Tempestade de Plasma, Anel de Saturno), nível antes/depois |
 | Servidor (MockMvc + H2) | 13 | cadastro, hash, conflito, validação, login, 401, histórico, perfil, plausibilidade, limites, ranking, isolamento, saúde/docs |
 
 **Integração contínua (GitHub Actions):** a cada envio compila e testa todas as fases com **Java 17 e 26**, sobe o
