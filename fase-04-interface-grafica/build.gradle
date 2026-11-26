@@ -1,0 +1,23 @@
+// Versão da libGDX compartilhada pelos módulos.
+ext {
+    gdxVersion = '1.12.1'
+    gltfVersion = '2.2.1'
+}
+
+// Configuração comum: core (jogo, sem plataforma) e lwjgl3 (janela desktop).
+subprojects {
+    apply plugin: 'java'
+
+    group = 'br.edu.unifor'
+    version = '1.0'
+
+    repositories {
+        mavenCentral()
+        maven { url 'https://jitpack.io' } // gdx-gltf (modelos glTF + renderização PBR)
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+        options.release = 17
+    }
+}

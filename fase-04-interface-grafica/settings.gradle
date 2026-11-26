@@ -1,0 +1,4 @@
+rootProject.name = 'missao-marte-interface-grafica'
+
+include 'core'
+include 'lwjgl3'
