@@ -486,8 +486,19 @@ public class TelaJogo extends ScreenAdapter {
 
     // ---------- modo demonstração (CI) ----------
 
+    private float esperaCartas;
+    private boolean cartasCapturadas;
+
     private Vetor pilotoAutomatico() {
         if (partida.estado() == EstadoPartida.ESCOLHENDO_UPGRADE) {
+            if (!cartasCapturadas) {
+                esperaCartas += Gdx.graphics.getDeltaTime();
+                if (esperaCartas < 1.2f) {
+                    return Vetor.ZERO;
+                }
+                jogo.salvarCaptura("captura-cartas.png");
+                cartasCapturadas = true;
+            }
             partida.escolherUpgrade(0);
         }
         Vetor pos = partida.nave().posicao();
