@@ -1,0 +1,66 @@
+Starting a Gradle Daemon (subsequent builds will be faster)
+Configuration 'nativas' was resolved during configuration time.
+This is a build performance and scalability issue.
+See https://github.com/gradle/gradle/issues/2298
+Run with --info for a stacktrace.
+> Task :android:extrairNativas_arm64-v8a
+> Task :android:extrairNativas_armeabi-v7a
+> Task :android:extrairNativas_x86
+> Task :android:extrairNativas_x86_64
+> Task :android:preBuild
+> Task :android:preDebugBuild
+> Task :android:mergeDebugNativeDebugMetadata NO-SOURCE
+
+> Task :core:compileJava
+Note: /home/runner/work/missao-marte-grupo08/missao-marte-grupo08/fase-06-android/cliente/core/src/main/java/br/edu/unifor/missaomarte/gdx/MissaoMarteJogo.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+
+> Task :core:processResources NO-SOURCE
+> Task :core:classes
+> Task :core:jar
+> Task :android:generateDebugResources
+> Task :android:packageDebugResources
+> Task :android:processDebugNavigationResources
+> Task :android:javaPreCompileDebug
+> Task :android:generateDebugAssets UP-TO-DATE
+> Task :android:parseDebugLocalResources
+> Task :android:mergeDebugAssets
+> Task :android:generateDebugRFile
+> Task :android:compileDebugKotlin NO-SOURCE
+> Task :android:compressDebugAssets
+
+> Task :android:compileDebugJavaWithJavac
+/home/runner/work/missao-marte-grupo08/missao-marte-grupo08/fase-06-android/cliente/android/src/main/java/br/edu/unifor/missaomarte/android/AndroidLauncher.java:9: error: cannot access Application
+public class AndroidLauncher extends AndroidApplication {
+       ^
+  class file for com.badlogic.gdx.Application not found
+1 error
+
+> Task :android:compileDebugJavaWithJavac FAILED
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run-1795680311001.json
+
+[Incubating] Problems report is available at: file:///home/runner/work/missao-marte-grupo08/missao-marte-grupo08/fase-06-android/cliente/build/reports/problems/problems-report.html
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':android:compileDebugJavaWithJavac' (registered by plugin 'com.android.internal.application').
+> Compilation failed; see the compiler output below.
+  /home/runner/work/missao-marte-grupo08/missao-marte-grupo08/fase-06-android/cliente/android/src/main/java/br/edu/unifor/missaomarte/android/AndroidLauncher.java:9: error: cannot access Application
+  public class AndroidLauncher extends AndroidApplication {
+         ^
+    class file for com.badlogic.gdx.Application not found
+  1 error
+
+* Try:
+> Check your code and dependencies to fix the compilation error(s)
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.8.2/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 47s
+15 actionable tasks: 15 executed
