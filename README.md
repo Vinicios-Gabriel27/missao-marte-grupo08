@@ -12,7 +12,7 @@ Evolução do jogo **Missão Marte Unifor**: de uma aplicação Java de console 
 | 0 — Projeto inicial (console) | `fase-0-console-original` | 1 | Preservado |
 | 1 — Refatoração arquitetural | `fase-01-refatoracao` | 1 | Concluída |
 | 2 — Gradle + JUnit 5 | `fase-02-gradle` | 1 | Concluída |
-| 3 — Introdução ao libGDX | `fase-03-libgdx` | 2 | Pendente |
+| 3 — libGDX 3D (modo sobrevivência) | `fase-03-libgdx` | 2 | Jogável |
 | 4 — Interface gráfica | `fase-04-interface-grafica` | 2 | Pendente |
 | 5 — Servidor e ranking global | `fase-05-servidor-ranking` | 3 | Pendente |
 | 6 — Android | `fase-06-android` | 4 | Pendente |
@@ -38,6 +38,7 @@ Instruções específicas no README de cada fase.
 ## Documentação
 
 - [Arquitetura e decisões — Sprint 1](docs/arquitetura-sprint1.md)
+- [Design do jogo (modo sobrevivência)](docs/design-jogo.md)
 
 ## Segurança
 

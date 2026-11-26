@@ -27,3 +27,26 @@ jobs:
         with:
           name: relatorio-testes-fase-02
           path: fase-02-gradle/build/reports/tests/test
+
+  fase-03-libgdx:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: fase-03-libgdx
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Testes e build (core + desktop)
+        run: |
+          chmod +x gradlew
+          ./gradlew build --console=plain
+      - name: Relatório de testes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: relatorio-testes-fase-03
+          path: fase-03-libgdx/core/build/reports/tests/test
