@@ -52,7 +52,7 @@ import net.mgsx.gltf.scene3d.utils.IBLBuilder;
  */
 public class TelaJogo extends ScreenAdapter {
     private static final Color CEU = new Color(0.62f, 0.36f, 0.26f, 1f);
-    private static final Vector3 DESLOCAMENTO_CAMERA = new Vector3(0, 15f, 10.5f);
+    private static final Vector3 DESLOCAMENTO_CAMERA = new Vector3(0, 12.5f, 11.5f);
     private static final String[] ANIM_INIMIGO = {"walk", "sprint", "walk", "walk"};
 
     private final MissaoMarteJogo jogo;
@@ -117,15 +117,15 @@ public class TelaJogo extends ScreenAdapter {
         sol = new DirectionalShadowLight(2048, 2048, 48f, 48f, 1f, 120f);
         sol.direction.set(-0.45f, -1f, -0.35f).nor();
         sol.baseColor.set(1f, 0.88f, 0.75f, 1f);
-        sol.intensity = 3.2f;
+        sol.intensity = 3.6f;
         sol.updateColor();
 
         // Luz de ambiente (IBL) com céu e chão em tons de Marte
         IBLBuilder ibl = IBLBuilder.createOutdoor(sol);
-        ibl.nearGroundColor.set(0.55f, 0.28f, 0.18f, 1f);
-        ibl.farGroundColor.set(0.35f, 0.16f, 0.1f, 1f);
-        ibl.nearSkyColor.set(0.95f, 0.65f, 0.5f, 1f);
-        ibl.farSkyColor.set(0.6f, 0.4f, 0.4f, 1f);
+        ibl.nearGroundColor.set(0.3f, 0.14f, 0.09f, 1f);
+        ibl.farGroundColor.set(0.2f, 0.09f, 0.06f, 1f);
+        ibl.nearSkyColor.set(0.55f, 0.38f, 0.32f, 1f);
+        ibl.farSkyColor.set(0.35f, 0.25f, 0.28f, 1f);
         mapaDifuso = ibl.buildIrradianceMap(256);
         mapaEspecular = ibl.buildRadianceMap(10);
         ibl.dispose();
@@ -138,9 +138,9 @@ public class TelaJogo extends ScreenAdapter {
         ambientePbr.set(new PBRTextureAttribute(PBRTextureAttribute.BRDFLUTTexture, brdf));
         ambientePbr.set(new PBRFloatAttribute(PBRFloatAttribute.ShadowBias, 1f / 512f));
         ambientePbr.set(new ColorAttribute(ColorAttribute.Fog, CEU));
-        ambientePbr.set(FogAttribute.createFog(20f, 85f, 1.2f));
+        ambientePbr.set(FogAttribute.createFog(32f, 95f, 1.5f));
 
-        ambienteClassico.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.45f, 0.36f, 0.34f, 1f));
+        ambienteClassico.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.32f, 0.24f, 0.24f, 1f));
         ambienteClassico.set(new ColorAttribute(ColorAttribute.Fog, CEU));
         ambienteClassico.add(new DirectionalLight().set(1f, 0.88f, 0.75f, sol.direction));
         ambienteClassico.shadowMap = sol;
@@ -324,10 +324,10 @@ public class TelaJogo extends ScreenAdapter {
     // ---------- efeitos (renderização clássica) ----------
 
     private void desenharEfeitos(ModelBatch batch, Environment env) {
-        ModelInstance anel = partida.plataformaAberta() ? iAnelAberto : iAnel;
-        anel.transform.setToTranslation(0, 0.25f, 0).scale(1f + 0.05f * MathUtils.sin(relogio * 4f), 1f, 1f + 0.05f * MathUtils.sin(relogio * 4f));
-        batch.render(anel, env);
         if (partida.plataformaAberta()) {
+            float pulso = 1f + 0.06f * MathUtils.sin(relogio * 5f);
+            iAnelAberto.transform.setToTranslation(0, 0.3f, 0).scale(pulso * 1.4f, 1f, pulso * 1.4f);
+            batch.render(iAnelAberto, env);
             iFeixePlataforma.transform.setToTranslation(0, 0, 0).rotate(Vector3.Y, relogio * 30f);
             batch.render(iFeixePlataforma, env);
         }

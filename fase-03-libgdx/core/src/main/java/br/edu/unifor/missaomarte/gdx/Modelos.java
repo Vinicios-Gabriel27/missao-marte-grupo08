@@ -86,7 +86,9 @@ public class Modelos implements Disposable {
         feixeAstronauta = criarFeixe(new Color(0.9f, 0.9f, 1f, 1f), 0.3f, 6f, 0.35f);
         feixePlataforma = criarFeixe(new Color(0.2f, 1f, 0.35f, 1f), 2.6f, 14f, 0.25f);
         anelPlataforma = mb.createCylinder(3.2f, 0.05f, 3.2f, 24, emissivo(new Color(1f, 0.5f, 0.1f, 1f)), ATRIBUTOS);
-        anelPlataformaAberta = mb.createCylinder(3.2f, 0.05f, 3.2f, 24, emissivo(new Color(0.2f, 1f, 0.35f, 1f)), ATRIBUTOS);
+        Material verde = emissivo(new Color(0.2f, 1f, 0.35f, 1f));
+        verde.set(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, 0.35f));
+        anelPlataformaAberta = mb.createCylinder(3.2f, 0.05f, 3.2f, 24, verde, ATRIBUTOS);
         particula = mb.createBox(1f, 1f, 1f, emissivo(Color.WHITE), ATRIBUTOS);
         montanha = mb.createCone(1f, 1f, 1f, 6, difuso(new Color(0.5f, 0.22f, 0.14f, 1f)), ATRIBUTOS);
     }

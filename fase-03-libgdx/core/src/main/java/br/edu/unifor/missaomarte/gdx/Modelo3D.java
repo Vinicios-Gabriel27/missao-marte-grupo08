@@ -24,7 +24,10 @@ class Modelo3D {
      * @param animacao    nome da animação em loop, ou null
      */
     Modelo3D(Model model, float tamanhoAlvo, boolean porAltura, float yawBase, int quantidadeVariantes, String animacao) {
-        BoundingBox caixa = model.calculateBoundingBox(new BoundingBox());
+        // Mede pela instância (já com as transformações dos nós): alguns modelos têm a origem num canto.
+        ModelInstance medida = new ModelInstance(model);
+        medida.calculateTransforms();
+        BoundingBox caixa = medida.calculateBoundingBox(new BoundingBox());
         float referencia = porAltura ? caixa.getHeight() : Math.max(caixa.getWidth(), caixa.getDepth());
         this.escala = tamanhoAlvo / Math.max(referencia, 1e-4f);
         this.yawBase = yawBase;
