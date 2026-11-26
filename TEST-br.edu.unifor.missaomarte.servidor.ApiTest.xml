@@ -1,0 +1,552 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="br.edu.unifor.missaomarte.servidor.ApiTest" tests="12" skipped="0" failures="2" errors="0" timestamp="2026-11-26T07:47:27.830Z" hostname="runnervm0hi8g" time="10.023">
+  <properties/>
+  <testcase name="camposForaDosLimitesSaoRecusados()" classname="br.edu.unifor.missaomarte.servidor.ApiTest" time="1.127"/>
+  <testcase name="pontuacaoImpossivelEhRecusada()" classname="br.edu.unifor.missaomarte.servidor.ApiTest" time="0.203"/>
+  <testcase name="historicoMostraSoAsPartidasDoProprioJogador()" classname="br.edu.unifor.missaomarte.servidor.ApiTest" time="0.378"/>
+  <testcase name="cadastroDevolveJogadorSemSenha()" classname="br.edu.unifor.missaomarte.servidor.ApiTest" time="0.087"/>
+  <testcase name="registrarPartidaExigeToken()" classname="br.edu.unifor.missaomarte.servidor.ApiTest" time="0.011"/>
+  <testcase name="loginComSenhaErradaFalha()" classname="br.edu.unifor.missaomarte.servidor.ApiTest" time="0.247"/>
+  <testcase name="partidaValidaEntraNoHistoricoEPerfil()" classname="br.edu.unifor.missaomarte.servidor.ApiTest" time="0.201">
+    <failure message="jakarta.servlet.ServletException: Request processing failed: org.hibernate.LazyInitializationException: Could not initialize proxy [br.edu.unifor.missaomarte.servidor.dominio.Jogador#7] - no session" type="jakarta.servlet.ServletException">jakarta.servlet.ServletException: Request processing failed: org.hibernate.LazyInitializationException: Could not initialize proxy [br.edu.unifor.missaomarte.servidor.dominio.Jogador#7] - no session
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1008)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:892)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:622)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:874)
+	at org.springframework.test.web.servlet.TestDispatcherServlet.service(TestDispatcherServlet.java:72)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:710)
+	at org.springframework.mock.web.MockFilterChain$ServletFilterProxy.doFilter(MockFilterChain.java:160)
+	at org.springframework.mock.web.MockFilterChain.doFilter(MockFilterChain.java:127)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$2(FilterChainProxy.java:235)
+	at org.springframework.security.web.ObservationFilterChainDecorator$FilterObservation$SimpleFilterObservation.lambda$wrap$1(ObservationFilterChainDecorator.java:491)
+	at org.springframework.security.web.ObservationFilterChainDecorator$AroundFilterObservation$SimpleAroundFilterObservation.lambda$wrap$1(ObservationFilterChainDecorator.java:353)
+	at org.springframework.security.web.ObservationFilterChainDecorator.lambda$wrapSecured$0(ObservationFilterChainDecorator.java:84)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:131)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:243)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:230)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:140)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:243)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:230)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:140)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:132)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:86)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:243)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:230)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:140)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:101)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:243)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:230)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:140)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:181)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:243)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:230)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:140)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:243)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:230)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:140)
+	at org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter.doFilterInternal(BearerTokenAuthenticationFilter.java:209)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:243)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:230)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:140)
+	at org.springframework.security.oauth2.server.resource.web.OAuth2ProtectedResourceMetadataFilter.doFilterInternal(OAuth2ProtectedResourceMetadataFilter.java:98)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:243)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:230)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:140)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:110)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:96)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:243)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:230)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:140)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:91)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:76)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:243)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:230)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:140)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:243)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:230)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:140)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:243)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:230)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:140)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:243)
+	at org.springframework.security.web.ObservationFilterChainDecorator$AroundFilterObservation$SimpleAroundFilterObservation.lambda$wrap$0(ObservationFilterChainDecorator.java:336)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:140)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:237)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:195)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.ServletRequestPathFilter.doFilter(ServletRequestPathFilter.java:52)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebSecurityConfiguration.java:317)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:355)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:272)
+	at org.springframework.test.web.servlet.setup.MockMvcFilterDecorator.doFilter(MockMvcFilterDecorator.java:160)
+	at org.springframework.mock.web.MockFilterChain.doFilter(MockFilterChain.java:127)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.test.web.servlet.setup.MockMvcFilterDecorator.doFilter(MockMvcFilterDecorator.java:160)
+	at org.springframework.mock.web.MockFilterChain.doFilter(MockFilterChain.java:127)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.test.web.servlet.setup.MockMvcFilterDecorator.doFilter(MockMvcFilterDecorator.java:160)
+	at org.springframework.mock.web.MockFilterChain.doFilter(MockFilterChain.java:127)
+	at org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:110)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.test.web.servlet.setup.MockMvcFilterDecorator.doFilter(MockMvcFilterDecorator.java:160)
+	at org.springframework.mock.web.MockFilterChain.doFilter(MockFilterChain.java:127)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:199)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.test.web.servlet.setup.MockMvcFilterDecorator.doFilter(MockMvcFilterDecorator.java:160)
+	at org.springframework.mock.web.MockFilterChain.doFilter(MockFilterChain.java:127)
+	at org.springframework.test.web.servlet.MockMvc.perform(MockMvc.java:199)
+	at br.edu.unifor.missaomarte.servidor.ApiTest.partidaValidaEntraNoHistoricoEPerfil(ApiTest.java:112)
+Caused by: org.hibernate.LazyInitializationException: Could not initialize proxy [br.edu.unifor.missaomarte.servidor.dominio.Jogador#7] - no session
+	at org.hibernate.proxy.AbstractLazyInitializer.initialize(AbstractLazyInitializer.java:178)
+	at org.hibernate.proxy.AbstractLazyInitializer.getImplementation(AbstractLazyInitializer.java:348)
+	at org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor.call(ByteBuddyInterceptor.java:45)
+	at org.hibernate.proxy.pojo.BasicLazyInitializer.invoke(BasicLazyInitializer.java:88)
+	at org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor.intercept(ByteBuddyInterceptor.java:40)
+	at org.hibernate.proxy.ProxyConfiguration$InterceptorDispatcher.intercept(ProxyConfiguration.java:95)
+	at br.edu.unifor.missaomarte.servidor.dominio.Jogador$HibernateProxy.getNome(Unknown Source)
+	at br.edu.unifor.missaomarte.servidor.api.Mapeador.partida(Mapeador.java:18)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:214)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1724)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:570)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:560)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:635)
+	at java.base/java.util.stream.AbstractPipeline.evaluateToArrayNode(AbstractPipeline.java:291)
+	at java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:652)
+	at java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:658)
+	at java.base/java.util.stream.ReferencePipeline.toList(ReferencePipeline.java:663)
+	at br.edu.unifor.missaomarte.servidor.api.PartidaController.minhas(PartidaController.java:51)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:252)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:184)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:934)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:853)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:86)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:963)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:866)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1000)
+	... 105 more
+</failure>
+  </testcase>
+  <testcase name="nomeRepetidoDaConflitoMesmoComOutraCaixa()" classname="br.edu.unifor.missaomarte.servidor.ApiTest" time="0.104"/>
+  <testcase name="senhaEhGuardadaComoHash()" classname="br.edu.unifor.missaomarte.servidor.ApiTest" time="0.143"/>
+  <testcase name="saudeEDocumentacaoSaoPublicas()" classname="br.edu.unifor.missaomarte.servidor.ApiTest" time="0.372"/>
+  <testcase name="rankingEhPublicoEOrdenado()" classname="br.edu.unifor.missaomarte.servidor.ApiTest" time="0.355">
+    <failure message="java.lang.AssertionError: Status expected:&lt;201&gt; but was:&lt;422&gt;" type="java.lang.AssertionError">java.lang.AssertionError: Status expected:&lt;201&gt; but was:&lt;422&gt;
+	at org.springframework.test.util.AssertionErrors.fail(AssertionErrors.java:62)
+	at org.springframework.test.util.AssertionErrors.assertEquals(AssertionErrors.java:129)
+	at org.springframework.test.web.servlet.result.StatusResultMatchers.lambda$matcher$0(StatusResultMatchers.java:600)
+	at org.springframework.test.web.servlet.MockMvc$1.andExpect(MockMvc.java:212)
+	at br.edu.unifor.missaomarte.servidor.ApiTest.rankingEhPublicoEOrdenado(ApiTest.java:153)
+</failure>
+  </testcase>
+  <testcase name="dadosInvalidosListamOsCampos()" classname="br.edu.unifor.missaomarte.servidor.ApiTest" time="0.013"/>
+  <system-out><![CDATA[07:47:27.999 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [br.edu.unifor.missaomarte.servidor.ApiTest]: ApiTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+07:47:28.132 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration br.edu.unifor.missaomarte.servidor.ServidorMissaoMarte for test class br.edu.unifor.missaomarte.servidor.ApiTest
+07:47:28.219 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [br.edu.unifor.missaomarte.servidor.ApiTest]: ApiTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+07:47:28.225 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration br.edu.unifor.missaomarte.servidor.ServidorMissaoMarte for test class br.edu.unifor.missaomarte.servidor.ApiTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.2)
+
+2026-11-26T07:47:28.606Z  INFO 2632 --- [missao-marte-servidor] [    Test worker] b.e.unifor.missaomarte.servidor.ApiTest  : Starting ApiTest using Java 26.0.2.1 with PID 2632 (started by runner in /home/runner/work/missao-marte-grupo08/missao-marte-grupo08/fase-05-servidor-ranking/servidor)
+2026-11-26T07:47:28.609Z  INFO 2632 --- [missao-marte-servidor] [    Test worker] b.e.unifor.missaomarte.servidor.ApiTest  : The following 1 profile is active: "test"
+2026-11-26T07:47:29.785Z  INFO 2632 --- [missao-marte-servidor] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-11-26T07:47:29.846Z  INFO 2632 --- [missao-marte-servidor] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 49 ms. Found 2 JPA repository interfaces.
+2026-11-26T07:47:30.459Z  INFO 2632 --- [missao-marte-servidor] [    Test worker] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-11-26T07:47:30.518Z  INFO 2632 --- [missao-marte-servidor] [    Test worker] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.4.13.Final
+2026-11-26T07:47:30.947Z  INFO 2632 --- [missao-marte-servidor] [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-11-26T07:47:30.971Z  INFO 2632 --- [missao-marte-servidor] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-11-26T07:47:31.120Z  INFO 2632 --- [missao-marte-servidor] [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testes user=SA
+2026-11-26T07:47:31.122Z  INFO 2632 --- [missao-marte-servidor] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-11-26T07:47:31.175Z  INFO 2632 --- [missao-marte-servidor] [    Test worker] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:h2:mem:testes]
+	Database driver: H2 JDBC Driver
+	Database dialect: H2Dialect
+	Database version: 2.4.240
+	Default catalog/schema: TESTES/PUBLIC
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: 100
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-11-26T07:47:31.915Z  INFO 2632 --- [missao-marte-servidor] [    Test worker] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-11-26T07:47:31.962Z  INFO 2632 --- [missao-marte-servidor] [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-11-26T07:47:32.047Z  INFO 2632 --- [missao-marte-servidor] [    Test worker] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-11-26T07:47:32.190Z  INFO 2632 --- [missao-marte-servidor] [    Test worker] b.e.u.m.s.seguranca.ConfiguracaoJwt      : Tokens JWT válidos por 120 minutos.
+2026-11-26T07:47:34.362Z  INFO 2632 --- [missao-marte-servidor] [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-11-26T07:47:34.363Z  INFO 2632 --- [missao-marte-servidor] [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-11-26T07:47:34.375Z  INFO 2632 --- [missao-marte-servidor] [    Test worker] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-11-26T07:47:34.380Z  INFO 2632 --- [missao-marte-servidor] [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 17 ms
+2026-11-26T07:47:34.504Z  INFO 2632 --- [missao-marte-servidor] [    Test worker] b.e.unifor.missaomarte.servidor.ApiTest  : Started ApiTest in 6.205 seconds (process running for 7.615)
+2026-11-26T07:47:34.589Z  WARN 2632 --- [missao-marte-servidor] [    Test worker] o.s.core.events.SpringDocAppInitializer  : SpringDoc /v3/api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
+2026-11-26T07:47:34.589Z  WARN 2632 --- [missao-marte-servidor] [    Test worker] o.s.core.events.SpringDocAppInitializer  : SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /api/jogadores
+       Parameters = {}
+          Headers = [Content-Type:"application/json;charset=UTF-8", Content-Length:"33"]
+             Body = {"nome":"Eva","senha":"senha123"}
+    Session Attrs = {}
+
+Handler:
+             Type = br.edu.unifor.missaomarte.servidor.api.JogadorController
+           Method = br.edu.unifor.missaomarte.servidor.api.JogadorController#cadastrar(CredenciaisRequisicao)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 201
+    Error message = null
+          Headers = [Content-Type:"application/json", X-Content-Type-Options:"nosniff", X-XSS-Protection:"0", Cache-Control:"no-cache, no-store, max-age=0, must-revalidate", Pragma:"no-cache", Expires:"0", X-Frame-Options:"DENY"]
+     Content type = application/json
+             Body = {"id":7,"nome":"Eva","criadoEm":"2026-11-26T07:47:36.739303617Z"}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /api/sessoes
+       Parameters = {}
+          Headers = [Content-Type:"application/json;charset=UTF-8", Content-Length:"33"]
+             Body = {"nome":"Eva","senha":"senha123"}
+    Session Attrs = {}
+
+Handler:
+             Type = br.edu.unifor.missaomarte.servidor.api.JogadorController
+           Method = br.edu.unifor.missaomarte.servidor.api.JogadorController#entrar(CredenciaisRequisicao)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Content-Type:"application/json", X-Content-Type-Options:"nosniff", X-XSS-Protection:"0", Cache-Control:"no-cache, no-store, max-age=0, must-revalidate", Pragma:"no-cache", Expires:"0", X-Frame-Options:"DENY"]
+     Content type = application/json
+             Body = {"token":"eyJraWQiOiI1Y1oyb0U3NzIyZW05QlpPLXRGWmVUVXJUcDMtdkI3QWthN2l2WXlMVXhZIiwiYWxnIjoiSFMyNTYifQ.eyJpc3MiOiJtaXNzYW8tbWFydGUiLCJzdWIiOiI3Iiwibm9tZSI6IkV2YSIsImV4cCI6MTc5NTY4NjQ1NiwiaWF0IjoxNzk1Njc5MjU2fQ.YjMLvhp_mxtMlzc315dBMB4paPX5t_6rHEq_u2ciBog","tipo":"Bearer","expiraEm":"2026-11-26T09:47:36.821785787Z","jogador":{"id":7,"nome":"Eva","criadoEm":"2026-11-26T07:47:36.739304Z"}}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /api/partidas
+       Parameters = {}
+          Headers = [Content-Type:"application/json;charset=UTF-8", Authorization:"Bearer eyJraWQiOiI1Y1oyb0U3NzIyZW05QlpPLXRGWmVUVXJUcDMtdkI3QWthN2l2WXlMVXhZIiwiYWxnIjoiSFMyNTYifQ.eyJpc3MiOiJtaXNzYW8tbWFydGUiLCJzdWIiOiI3Iiwibm9tZSI6IkV2YSIsImV4cCI6MTc5NTY4NjQ1NiwiaWF0IjoxNzk1Njc5MjU2fQ.YjMLvhp_mxtMlzc315dBMB4paPX5t_6rHEq_u2ciBog", Content-Length:"112"]
+             Body = {"pontuacao":1200,"dificuldade":"MEDIO","tempoSegundos":300,"nivel":5,"abates":40,"passageiros":5,"venceu":true}
+    Session Attrs = {}
+
+Handler:
+             Type = br.edu.unifor.missaomarte.servidor.api.PartidaController
+           Method = br.edu.unifor.missaomarte.servidor.api.PartidaController#registrar(Jwt, PartidaRequisicao)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 201
+    Error message = null
+          Headers = [Content-Type:"application/json", X-Content-Type-Options:"nosniff", X-XSS-Protection:"0", Cache-Control:"no-cache, no-store, max-age=0, must-revalidate", Pragma:"no-cache", Expires:"0", X-Frame-Options:"DENY"]
+     Content type = application/json
+             Body = {"partida":{"id":2,"jogador":"Eva","pontuacao":1200,"dificuldade":"MEDIO","tempoSegundos":300,"nivel":5,"abates":40,"passageiros":5,"venceu":true,"registradaEm":"2026-11-26T07:47:36.830748200Z"},"posicaoGlobal":1}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+2026-11-26T07:47:37.451Z  INFO 2632 --- [missao-marte-servidor] [    Test worker] o.springdoc.api.AbstractOpenApiResource  : Init duration for springdoc-openapi is: 303 ms
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /api/jogadores
+       Parameters = {}
+          Headers = [Content-Type:"application/json;charset=UTF-8", Content-Length:"34"]
+             Body = {"nome":"Hugo","senha":"senha123"}
+    Session Attrs = {}
+
+Handler:
+             Type = br.edu.unifor.missaomarte.servidor.api.JogadorController
+           Method = br.edu.unifor.missaomarte.servidor.api.JogadorController#cadastrar(CredenciaisRequisicao)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 201
+    Error message = null
+          Headers = [Content-Type:"application/json", X-Content-Type-Options:"nosniff", X-XSS-Protection:"0", Cache-Control:"no-cache, no-store, max-age=0, must-revalidate", Pragma:"no-cache", Expires:"0", X-Frame-Options:"DENY"]
+     Content type = application/json
+             Body = {"id":10,"nome":"Hugo","criadoEm":"2026-11-26T07:47:37.566993375Z"}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /api/sessoes
+       Parameters = {}
+          Headers = [Content-Type:"application/json;charset=UTF-8", Content-Length:"34"]
+             Body = {"nome":"Hugo","senha":"senha123"}
+    Session Attrs = {}
+
+Handler:
+             Type = br.edu.unifor.missaomarte.servidor.api.JogadorController
+           Method = br.edu.unifor.missaomarte.servidor.api.JogadorController#entrar(CredenciaisRequisicao)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Content-Type:"application/json", X-Content-Type-Options:"nosniff", X-XSS-Protection:"0", Cache-Control:"no-cache, no-store, max-age=0, must-revalidate", Pragma:"no-cache", Expires:"0", X-Frame-Options:"DENY"]
+     Content type = application/json
+             Body = {"token":"eyJraWQiOiI1Y1oyb0U3NzIyZW05QlpPLXRGWmVUVXJUcDMtdkI3QWthN2l2WXlMVXhZIiwiYWxnIjoiSFMyNTYifQ.eyJpc3MiOiJtaXNzYW8tbWFydGUiLCJzdWIiOiIxMCIsIm5vbWUiOiJIdWdvIiwiZXhwIjoxNzk1Njg2NDU3LCJpYXQiOjE3OTU2NzkyNTd9.Ph7KfOU4KpxKPUEaDH8_3nDB4sJMvffnksyaUWhDa3E","tipo":"Bearer","expiraEm":"2026-11-26T09:47:37.648000407Z","jogador":{"id":10,"nome":"Hugo","criadoEm":"2026-11-26T07:47:37.566993Z"}}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /api/jogadores
+       Parameters = {}
+          Headers = [Content-Type:"application/json;charset=UTF-8", Content-Length:"34"]
+             Body = {"nome":"Iris","senha":"senha123"}
+    Session Attrs = {}
+
+Handler:
+             Type = br.edu.unifor.missaomarte.servidor.api.JogadorController
+           Method = br.edu.unifor.missaomarte.servidor.api.JogadorController#cadastrar(CredenciaisRequisicao)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 201
+    Error message = null
+          Headers = [Content-Type:"application/json", X-Content-Type-Options:"nosniff", X-XSS-Protection:"0", Cache-Control:"no-cache, no-store, max-age=0, must-revalidate", Pragma:"no-cache", Expires:"0", X-Frame-Options:"DENY"]
+     Content type = application/json
+             Body = {"id":11,"nome":"Iris","criadoEm":"2026-11-26T07:47:37.727928622Z"}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /api/sessoes
+       Parameters = {}
+          Headers = [Content-Type:"application/json;charset=UTF-8", Content-Length:"34"]
+             Body = {"nome":"Iris","senha":"senha123"}
+    Session Attrs = {}
+
+Handler:
+             Type = br.edu.unifor.missaomarte.servidor.api.JogadorController
+           Method = br.edu.unifor.missaomarte.servidor.api.JogadorController#entrar(CredenciaisRequisicao)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Content-Type:"application/json", X-Content-Type-Options:"nosniff", X-XSS-Protection:"0", Cache-Control:"no-cache, no-store, max-age=0, must-revalidate", Pragma:"no-cache", Expires:"0", X-Frame-Options:"DENY"]
+     Content type = application/json
+             Body = {"token":"eyJraWQiOiI1Y1oyb0U3NzIyZW05QlpPLXRGWmVUVXJUcDMtdkI3QWthN2l2WXlMVXhZIiwiYWxnIjoiSFMyNTYifQ.eyJpc3MiOiJtaXNzYW8tbWFydGUiLCJzdWIiOiIxMSIsIm5vbWUiOiJJcmlzIiwiZXhwIjoxNzk1Njg2NDU3LCJpYXQiOjE3OTU2NzkyNTd9.h7W_T2bD0PaXK1nj9zQj5ilgHLl2AyamVDI78OJmGe4","tipo":"Bearer","expiraEm":"2026-11-26T09:47:37.808985833Z","jogador":{"id":11,"nome":"Iris","criadoEm":"2026-11-26T07:47:37.727929Z"}}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /api/partidas
+       Parameters = {}
+          Headers = [Content-Type:"application/json;charset=UTF-8", Authorization:"Bearer eyJraWQiOiI1Y1oyb0U3NzIyZW05QlpPLXRGWmVUVXJUcDMtdkI3QWthN2l2WXlMVXhZIiwiYWxnIjoiSFMyNTYifQ.eyJpc3MiOiJtaXNzYW8tbWFydGUiLCJzdWIiOiIxMCIsIm5vbWUiOiJIdWdvIiwiZXhwIjoxNzk1Njg2NDU3LCJpYXQiOjE3OTU2NzkyNTd9.Ph7KfOU4KpxKPUEaDH8_3nDB4sJMvffnksyaUWhDa3E", Content-Length:"112"]
+             Body = {"pontuacao":300,"dificuldade":"MEDIO","tempoSegundos":100,"nivel":5,"abates":10,"passageiros":0,"venceu":false}
+    Session Attrs = {}
+
+Handler:
+             Type = br.edu.unifor.missaomarte.servidor.api.PartidaController
+           Method = br.edu.unifor.missaomarte.servidor.api.PartidaController#registrar(Jwt, PartidaRequisicao)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 201
+    Error message = null
+          Headers = [Content-Type:"application/json", X-Content-Type-Options:"nosniff", X-XSS-Protection:"0", Cache-Control:"no-cache, no-store, max-age=0, must-revalidate", Pragma:"no-cache", Expires:"0", X-Frame-Options:"DENY"]
+     Content type = application/json
+             Body = {"partida":{"id":3,"jogador":"Hugo","pontuacao":300,"dificuldade":"MEDIO","tempoSegundos":100,"nivel":5,"abates":10,"passageiros":0,"venceu":false,"registradaEm":"2026-11-26T07:47:37.817760404Z"},"posicaoGlobal":2}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /api/partidas
+       Parameters = {}
+          Headers = [Content-Type:"application/json;charset=UTF-8", Authorization:"Bearer eyJraWQiOiI1Y1oyb0U3NzIyZW05QlpPLXRGWmVUVXJUcDMtdkI3QWthN2l2WXlMVXhZIiwiYWxnIjoiSFMyNTYifQ.eyJpc3MiOiJtaXNzYW8tbWFydGUiLCJzdWIiOiIxMSIsIm5vbWUiOiJJcmlzIiwiZXhwIjoxNzk1Njg2NDU3LCJpYXQiOjE3OTU2NzkyNTd9.h7W_T2bD0PaXK1nj9zQj5ilgHLl2AyamVDI78OJmGe4", Content-Length:"115"]
+             Body = {"pontuacao":9000,"dificuldade":"MEDIO","tempoSegundos":2000,"nivel":5,"abates":400,"passageiros":3,"venceu":false}
+    Session Attrs = {}
+
+Handler:
+             Type = br.edu.unifor.missaomarte.servidor.api.PartidaController
+           Method = br.edu.unifor.missaomarte.servidor.api.PartidaController#registrar(Jwt, PartidaRequisicao)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = br.edu.unifor.missaomarte.servidor.erro.ApiExcecao
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 422
+    Error message = null
+          Headers = [Content-Type:"application/problem+json", X-Content-Type-Options:"nosniff", X-XSS-Protection:"0", Cache-Control:"no-cache, no-store, max-age=0, must-revalidate", Pragma:"no-cache", Expires:"0", X-Frame-Options:"DENY"]
+     Content type = application/problem+json
+             Body = {"detail":"A pontuação não é compatível com as estatísticas enviadas.","instance":"/api/partidas","status":422,"title":"Unprocessable Content","type":"https://missao-marte/erros/pontuacao-implausivel","codigo":"PONTUACAO_IMPLAUSIVEL"}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+]]></system-out>
+  <system-err><![CDATA[Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+WARNING: A Java agent has been loaded dynamically (/home/runner/.gradle/caches/modules-2/files-2.1/net.bytebuddy/byte-buddy-agent/1.18.15/de6980bb799c25bb1fe9e6c434201299cb5e694e/byte-buddy-agent-1.18.15.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+]]></system-err>
+</testsuite>
