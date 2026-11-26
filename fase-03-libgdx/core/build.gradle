@@ -1,6 +1,7 @@
 // Jogo e regras. O pacote "sobrevivencia" não importa nada da libGDX (testável sem janela).
 dependencies {
     implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+    implementation "com.github.mgsx-dev.gdx-gltf:gltf:$gltfVersion"
 
     testImplementation platform('org.junit:junit-bom:5.10.2')
     testImplementation 'org.junit.jupiter:junit-jupiter'

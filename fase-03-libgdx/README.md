@@ -39,6 +39,20 @@ core/
 lwjgl3/                 janela desktop (Lwjgl3Launcher)
 ```
 
+## Gráficos
+
+- Modelos 3D dos pacotes **Kenney Space Kit** e **Mini Characters** (licença CC0, em `assets/modelos`),
+  carregados com a extensão **gdx-gltf** e desenhados com **renderização PBR** (luz de ambiente IBL em tons de Marte).
+- Personagens animados: inimigos andam/correm, passageiros acenam.
+- Sombras do sol, névoa, chão com textura gerada por código, explosões em partículas, rastro do motor.
+
+| Elemento | Modelo |
+|---|---|
+| Nave | `craft_speederA` |
+| Perseguidor / Rápido / Tanque / Chefe | `character-alien` / `character-zombie` / `character-robot` / `character-knight` |
+| Professor / Engenheiro / Astronauta | `character-male-b` / `character-worker` / `astronautA` |
+| Cenário | rochas, cristais, crateras, hangar, antena, torreta, rover, gerador |
+
 ## Ciclo de vida libGDX
 
 `create()` cria os recursos (fonte, SpriteBatch) → `render()` roda a cada quadro

@@ -6,6 +6,9 @@ dependencies {
     implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 }
 
+// Modelos 3D e texturas ficam em fase-03-libgdx/assets e entram no classpath do desktop.
+sourceSets.main.resources.srcDirs += [rootProject.file('assets').path]
+
 application {
     mainClass = 'br.edu.unifor.missaomarte.lwjgl3.Lwjgl3Launcher'
 }

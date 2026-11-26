@@ -27,7 +27,9 @@ public interface CronogramaPassageiros {
     }
 
     final class Escalonado implements CronogramaPassageiros {
-        private static final String[] NOMES = {"Dr. Silva", "Eng. Rosa", "Ast. Maria", "Dr. Lima", "Eng. Carlos"};
+        private static final String[] PROFESSORES = {"Dr. Silva", "Dra. Lima", "Dr. Bezerra", "Dra. Ana", "Dr. Paulo"};
+        private static final String[] ENGENHEIROS = {"Eng. Rosa", "Eng. Carlos", "Eng. Bia", "Eng. Davi", "Eng. Lia"};
+        private static final String[] ASTRONAUTAS = {"Ast. Maria", "Ast. João", "Ast. Clara", "Ast. Rui", "Ast. Nina"};
 
         private final Random random;
         private final float[] instantes;
@@ -45,11 +47,10 @@ public interface CronogramaPassageiros {
                 float angulo = random.nextFloat() * (float) (2 * Math.PI);
                 float dist = 10f + random.nextFloat() * 12f;
                 Vetor pos = arena.limitar(nave.mais(Vetor.polar(angulo, dist)));
-                String nome = NOMES[proximo % NOMES.length];
                 novos.add(switch (random.nextInt(3)) {
-                    case 0 -> new Professor(nome, pos);
-                    case 1 -> new Engenheiro(nome, pos);
-                    default -> new Astronauta(nome, pos);
+                    case 0 -> new Professor(PROFESSORES[proximo % PROFESSORES.length], pos);
+                    case 1 -> new Engenheiro(ENGENHEIROS[proximo % ENGENHEIROS.length], pos);
+                    default -> new Astronauta(ASTRONAUTAS[proximo % ASTRONAUTAS.length], pos);
                 });
                 proximo++;
             }

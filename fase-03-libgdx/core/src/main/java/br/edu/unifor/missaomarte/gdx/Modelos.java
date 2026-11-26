@@ -43,6 +43,12 @@ public class Modelos implements Disposable {
     public final Model onda;
     public final Model seta;
     public final Model particula;
+    public final Model feixeProfessor;
+    public final Model feixeEngenheiro;
+    public final Model feixeAstronauta;
+    public final Model feixePlataforma;
+    public final Model anelPlataforma;
+    public final Model anelPlataformaAberta;
     public final Model montanha;
     private final Texture texturaChao;
 
@@ -75,6 +81,12 @@ public class Modelos implements Disposable {
         anel.set(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, 0.5f));
         onda = mb.createCylinder(2f, 0.08f, 2f, 32, anel, ATRIBUTOS);
         seta = criarSeta();
+        feixeProfessor = criarFeixe(new Color(0.3f, 0.5f, 1f, 1f), 0.3f, 6f, 0.35f);
+        feixeEngenheiro = criarFeixe(new Color(1f, 0.6f, 0.1f, 1f), 0.3f, 6f, 0.35f);
+        feixeAstronauta = criarFeixe(new Color(0.9f, 0.9f, 1f, 1f), 0.3f, 6f, 0.35f);
+        feixePlataforma = criarFeixe(new Color(0.2f, 1f, 0.35f, 1f), 2.6f, 14f, 0.25f);
+        anelPlataforma = mb.createCylinder(3.2f, 0.05f, 3.2f, 24, emissivo(new Color(1f, 0.5f, 0.1f, 1f)), ATRIBUTOS);
+        anelPlataformaAberta = mb.createCylinder(3.2f, 0.05f, 3.2f, 24, emissivo(new Color(0.2f, 1f, 0.35f, 1f)), ATRIBUTOS);
         particula = mb.createBox(1f, 1f, 1f, emissivo(Color.WHITE), ATRIBUTOS);
         montanha = mb.createCone(1f, 1f, 1f, 6, difuso(new Color(0.5f, 0.22f, 0.14f, 1f)), ATRIBUTOS);
     }
@@ -210,6 +222,17 @@ public class Modelos implements Disposable {
         return mb.end();
     }
 
+    /** Coluna de luz translúcida (base no chão), para achar coisas de longe. */
+    private Model criarFeixe(Color cor, float diametro, float altura, float opacidade) {
+        Material m = emissivo(cor);
+        m.set(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, opacidade));
+        mb.begin();
+        MeshPartBuilder p = mb.part("feixe", GL20.GL_TRIANGLES, ATRIBUTOS, m);
+        p.setVertexTransform(new Matrix4().setToTranslation(0f, altura / 2f, 0f));
+        p.cylinder(diametro, altura, diametro, 10);
+        return mb.end();
+    }
+
     private Model criarSeta() {
         mb.begin();
         Matrix4 t = new Matrix4();
@@ -232,7 +255,8 @@ public class Modelos implements Disposable {
     public void dispose() {
         for (Model m : new Model[] {nave, perseguidor, rapido, tanque, chefe, projetil, cristal, professor,
                 engenheiro, astronauta, plataforma, plataformaAberta, chao, rocha, cratera, muro, orbital, onda, seta,
-                particula, montanha}) {
+                particula, montanha, feixeProfessor, feixeEngenheiro, feixeAstronauta, feixePlataforma,
+                anelPlataforma, anelPlataformaAberta}) {
             m.dispose();
         }
         texturaChao.dispose();
