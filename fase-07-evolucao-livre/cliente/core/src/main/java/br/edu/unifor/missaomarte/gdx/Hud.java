@@ -347,9 +347,9 @@ class Hud {
                 float ciclo = (tempoEscolha * 0.6f + i * 0.3f) % 1.6f;
                 float faixaX = r.x - 60 + ciclo / 1.6f * (r.width + 120);
                 for (int k = 0; k < 6; k++) {
-                    float x0 = faixaX + k * 6;
-                    float x1 = Math.max(r.x + 8, x0);
-                    float x2 = Math.min(r.x + r.width - 8, x0 + 6);
+                    float xs = faixaX + k * 6;
+                    float x1 = Math.max(r.x + 8, xs);
+                    float x2 = Math.min(r.x + r.width - 8, xs + 6);
                     if (x2 > x1) {
                         f.setColor(1f, 1f, 1f, 0.05f + 0.025f * (3 - Math.abs(k - 2.5f)));
                         f.rect(x1, r.y + 8, x2 - x1, r.height - 16);

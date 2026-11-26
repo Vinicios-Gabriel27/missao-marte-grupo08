@@ -275,19 +275,6 @@ public class TelaJogo extends ScreenAdapter {
 
     /** Faíscas em cada inimigo atingido pelo raio; na Tempestade Elétrica, clarão e tremor. */
     private void efeitoRaio() {
-        for (float[] e : explosoesFogo) {
-            float prog = Math.min(1f, e[2] / 0.5f);
-            float raio = e[3] * com.badlogic.gdx.math.Interpolation.pow2Out.apply(prog);
-            BlendingAttribute bl = (BlendingAttribute) iAnelFogo.materials.get(0).get(BlendingAttribute.Type);
-            bl.opacity = 0.75f * (1 - prog);
-            iAnelFogo.transform.setToTranslation(e[0], 0.25f, e[1]).scale(raio, 1f, raio);
-            batch.render(iAnelFogo, env);
-            float bola = e[3] * 0.7f * (1 - prog);
-            if (bola > 0.05f) {
-                iBrilhoFogo.transform.setToTranslation(e[0], 0.6f, e[1]).scale(bola, bola * 0.7f, bola);
-                batch.render(iBrilhoFogo, env);
-            }
-        }
         partida.arma(RaioEmCadeia.class).ifPresent(r -> {
             boolean evo = r.evoluida();
             List<Vetor> c = r.ultimoCaminho();
@@ -372,7 +359,7 @@ public class TelaJogo extends ScreenAdapter {
             batch.render(iCristal, env);
         }
         boolean plasma = partida.arma(br.edu.unifor.missaomarte.sobrevivencia.armas.TiroAutomatico.class)
-                .map(t -> t.evoluida()).orElse(false);
+                .map(br.edu.unifor.missaomarte.sobrevivencia.armas.Arma::evoluida).orElse(false);
         float escTiro = plasma ? 1.7f : 1f;
         for (Projetil p : partida.projeteis()) {
             iProjetil.transform.setToTranslation(p.posicao().x(), 0.8f, -p.posicao().y()).rotate(Vector3.Y, angulo(p.velocidade()))
@@ -440,6 +427,19 @@ public class TelaJogo extends ScreenAdapter {
                 misseisVistos.addAll(agora);
             }
         });
+        for (float[] e : explosoesFogo) {
+            float prog = Math.min(1f, e[2] / 0.5f);
+            float raio = e[3] * com.badlogic.gdx.math.Interpolation.pow2Out.apply(prog);
+            BlendingAttribute bl = (BlendingAttribute) iAnelFogo.materials.get(0).get(BlendingAttribute.Type);
+            bl.opacity = 0.75f * (1 - prog);
+            iAnelFogo.transform.setToTranslation(e[0], 0.25f, e[1]).scale(raio, 1f, raio);
+            batch.render(iAnelFogo, env);
+            float bola = e[3] * 0.7f * (1 - prog);
+            if (bola > 0.05f) {
+                iBrilhoFogo.transform.setToTranslation(e[0], 0.6f, e[1]).scale(bola, bola * 0.7f, bola);
+                batch.render(iBrilhoFogo, env);
+            }
+        }
         partida.arma(RaioEmCadeia.class).ifPresent(r -> {
             boolean evo = r.evoluida();
             float duracao = evo ? 0.3f : 0.18f;
@@ -680,7 +680,7 @@ public class TelaJogo extends ScreenAdapter {
     private void evoluirTudoNaDemonstracao() {
         demoEvoluiu = true;
         var r = br.edu.unifor.missaomarte.sobrevivencia.upgrades.Raridade.LENDARIO;
-        var catalogo = java.util.List.of(
+        java.util.List<br.edu.unifor.missaomarte.sobrevivencia.upgrades.Upgrade> catalogo = java.util.List.of(
                 new br.edu.unifor.missaomarte.sobrevivencia.upgrades.UpgradeArma<>(br.edu.unifor.missaomarte.sobrevivencia.armas.TiroAutomatico.class,
                         br.edu.unifor.missaomarte.sobrevivencia.armas.TiroAutomatico::new, "", "tiro"),
                 new br.edu.unifor.missaomarte.sobrevivencia.upgrades.UpgradeArma<>(Orbital.class, Orbital::new, "", "orbital"),
