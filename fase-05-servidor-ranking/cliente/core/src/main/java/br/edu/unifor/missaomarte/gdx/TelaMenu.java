@@ -403,9 +403,9 @@ public class TelaMenu extends ScreenAdapter {
             Ui.texto(b, fontes.titulo, "CONTA ONLINE", w / 2, 590, Align.center, Ui.CIANO);
             Ui.texto(b, fontes.textoPequeno, "Sem conta você joga como convidado (ranking local).", w / 2, 540,
                     Align.center, Ui.CINZA);
-            boolean cursor = (int) (tempo * 2.5f) % 2 == 0;
+            boolean piscar = (int) (tempo * 2.5f) % 2 == 0;
             for (int i = 0; i < campos.length; i++) {
-                campos[i].desenharTexto(b, fontes, i == campoFoco, cursor);
+                campos[i].desenharTexto(b, fontes, i == campoFoco, piscar);
             }
             if (jogo.conta().logado()) {
                 sairConta.desenharTexto(b, fontes.texto);
