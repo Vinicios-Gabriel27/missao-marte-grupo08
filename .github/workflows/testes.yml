@@ -62,6 +62,8 @@ jobs:
   executar-jogo:
     # Abre o jogo num monitor virtual (Xvfb + Mesa), joga sozinho 45 s e salva capturas de tela.
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     needs: fase-03-libgdx
     defaults:
       run:
@@ -91,3 +93,13 @@ jobs:
           path: |
             fase-03-libgdx/execucao.log
             fase-03-libgdx/*.png
+      - name: Publicar capturas no branch "capturas"
+        if: always()
+        run: |
+          mkdir -p /tmp/capturas && cp execucao.log *.png /tmp/capturas/ 2>/dev/null || true
+          cd /tmp/capturas
+          git init -q -b capturas
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add -A && git commit -qm "Capturas da execução ${GITHUB_SHA::7}"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" capturas
