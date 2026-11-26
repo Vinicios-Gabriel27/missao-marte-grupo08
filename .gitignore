@@ -21,3 +21,8 @@ ranking*.json
 .env
 *.env
 local.properties
+# Banco H2 local do servidor
+dados/
+*.mv.db
+*.trace.db
+missao-marte-ranking.json
