@@ -54,6 +54,10 @@ class Particulas {
             new Color(1f, 0.6f, 0.15f, 1f),     // 4 fogo/motor
             new Color(0.4f, 1f, 1f, 1f),        // 5 faísca de tiro
             new Color(0.5f, 1f, 0.5f, 1f),      // 6 XP
+            new Color(0.7f, 0.55f, 1f, 1f),     // 7 elétrico
+            new Color(1f, 1f, 1f, 1f),          // 8 branco
+            new Color(0.3f, 1f, 0.45f, 1f),     // 9 cura
+            new Color(1f, 0.85f, 0.3f, 1f),     // 10 dourado
         }) {
             ModelInstance inst = new ModelInstance(modelos.particula);
             inst.materials.get(0).set(ColorAttribute.createDiffuse(c), ColorAttribute.createEmissive(c));
@@ -81,6 +85,53 @@ class Particulas {
             p.vidaTotal = p.vida = 0.3f;
             p.tamanho = 0.5f;
             p.cor = 4;
+            p.gravidade = false;
+            ativas.add(p);
+        }
+    }
+
+    /** Faíscas rápidas, sem fogo (raio, brilho de carta lendária). */
+    void faiscas(float x, float y, float z, int cor, int quantidade, float forca) {
+        for (int i = 0; i < quantidade; i++) {
+            Particula p = pool.obtain();
+            p.pos.set(x, y, z);
+            p.vel.set(MathUtils.random(-1f, 1f), MathUtils.random(-0.3f, 1f), MathUtils.random(-1f, 1f)).nor().scl(forca * MathUtils.random(0.4f, 1f));
+            p.vidaTotal = p.vida = MathUtils.random(0.15f, 0.35f);
+            p.tamanho = MathUtils.random(0.08f, 0.18f);
+            p.giro = MathUtils.random(360f);
+            p.cor = cor;
+            p.gravidade = false;
+            ativas.add(p);
+        }
+    }
+
+    /** Brilhos subindo em espiral em volta de um ponto (cura). */
+    void subir(float x, float z, int cor, int quantidade) {
+        for (int i = 0; i < quantidade; i++) {
+            Particula p = pool.obtain();
+            float a = MathUtils.random(MathUtils.PI2);
+            float r = MathUtils.random(0.4f, 1.3f);
+            p.pos.set(x + MathUtils.cos(a) * r, MathUtils.random(0.2f, 1.2f), z + MathUtils.sin(a) * r);
+            p.vel.set(-MathUtils.sin(a) * 1.2f, MathUtils.random(2f, 4f), MathUtils.cos(a) * 1.2f);
+            p.vidaTotal = p.vida = MathUtils.random(0.6f, 1.1f);
+            p.tamanho = MathUtils.random(0.12f, 0.26f);
+            p.giro = MathUtils.random(360f);
+            p.cor = cor;
+            p.gravidade = false;
+            ativas.add(p);
+        }
+    }
+
+    /** Rastro de fogo grosso (meteoro). */
+    void rastroFogo(float x, float y, float z) {
+        for (int i = 0; i < 3; i++) {
+            Particula p = pool.obtain();
+            p.pos.set(x + MathUtils.random(-0.25f, 0.25f), y + MathUtils.random(-0.2f, 0.2f), z + MathUtils.random(-0.25f, 0.25f));
+            p.vel.set(MathUtils.random(-0.4f, 0.4f), MathUtils.random(0.5f, 1.5f), MathUtils.random(-0.4f, 0.4f));
+            p.vidaTotal = p.vida = MathUtils.random(0.35f, 0.6f);
+            p.tamanho = MathUtils.random(0.35f, 0.6f);
+            p.giro = MathUtils.random(360f);
+            p.cor = i == 0 ? 10 : 4;
             p.gravidade = false;
             ativas.add(p);
         }

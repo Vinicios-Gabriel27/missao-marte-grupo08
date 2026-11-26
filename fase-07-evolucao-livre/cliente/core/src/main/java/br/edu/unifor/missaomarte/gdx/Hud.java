@@ -65,12 +65,17 @@ class Hud {
             case PLATAFORMA_ABERTA -> avisar("PLATAFORMA ABERTA!  Volte ao centro", new Color(0.4f, 1f, 0.5f, 1f));
             case CHEFE_APARECEU -> avisar("O GUARDIÃO DESPERTOU!", new Color(1f, 0.3f, 0.25f, 1f));
             case SUBIU_NIVEL -> tempoEscolha = 0;
+            case NAVE_CURADA -> avisar("VIDA RECUPERADA!", new Color(0.35f, 1f, 0.5f, 1f));
             case EVOLUCAO -> {
                 var ev = partida.evolucoes();
                 avisar("CARTA CRUEL: " + ev.get(ev.size() - 1).titulo() + "!", new Color(1f, 0.3f, 0.2f, 1f));
             }
             default -> { }
         }
+    }
+
+    void lendaria(String titulo) {
+        avisar("LENDÁRIA!  " + titulo, new Color(1f, 0.8f, 0.2f, 1f));
     }
 
     private void avisar(String texto, Color cor) {
@@ -307,6 +312,13 @@ class Hud {
         int n = partida.opcoesUpgrade().size();
         float total = n * CARTA_L + (n - 1) * 34;
         float x0 = (w - total) / 2;
+        // raios de luz atrás das cartas especiais (antes de todas, para não cobrir as vizinhas)
+        for (int i = 0; i < n && tempoEscolha > 0.3f; i++) {
+            OpcaoUpgrade u = partida.opcoesUpgrade().get(i);
+            if (u.ehEvolucao() || u.raridade() == Raridade.LENDARIO) {
+                desenharRaios(f, cartoes[i], u.ehEvolucao() ? new Color(1f, 0.25f, 0.15f, 1f) : new Color(1f, 0.8f, 0.25f, 1f), i);
+            }
+        }
         for (int i = 0; i < n; i++) {
             OpcaoUpgrade u = partida.opcoesUpgrade().get(i);
             float atraso = Math.max(0, Math.min(1, (tempoEscolha - i * 0.08f) * 4.5f));
@@ -317,8 +329,12 @@ class Hud {
             r.y += flutua;
             Color cor = corDoUpgrade(u);
             boolean cruel = u.ehEvolucao();
-            // brilho externo (pulsa na carta cruel)
-            float pulso = cruel ? 0.35f + 0.25f * MathUtils.sin(tempoEscolha * 6f) : (sobre ? 0.4f : 0.18f);
+            boolean especial = cruel || u.raridade() == Raridade.LENDARIO;
+            // brilho externo (pulsa nas cartas cruel e lendária, em duas camadas)
+            float pulso = especial ? 0.35f + 0.25f * MathUtils.sin(tempoEscolha * 6f) : (sobre ? 0.4f : 0.18f);
+            if (especial) {
+                Ui.retanguloArredondado(f, r.x - 16, r.y - 16, r.width + 32, r.height + 32, 28, new Color(cor.r, cor.g, cor.b, pulso * 0.45f));
+            }
             Ui.retanguloArredondado(f, r.x - 8, r.y - 8, r.width + 16, r.height + 16, 22, new Color(cor.r, cor.g, cor.b, pulso));
             // moldura e corpo
             Ui.retanguloArredondado(f, r.x, r.y, r.width, r.height, 18, cor);
@@ -326,6 +342,21 @@ class Hud {
             Ui.retanguloArredondado(f, r.x + 6, r.y + 6, r.width - 12, r.height - 12, 14, corpo);
             // faixa do topo (raridade) e moldura do ícone
             Ui.retanguloArredondado(f, r.x + 6, r.y + r.height - 44, r.width - 12, 38, 12, new Color(cor.r, cor.g, cor.b, 0.85f));
+            if (especial) {
+                // reflexo de luz passando pela carta de tempos em tempos
+                float ciclo = (tempoEscolha * 0.6f + i * 0.3f) % 1.6f;
+                float faixaX = r.x - 60 + ciclo / 1.6f * (r.width + 120);
+                for (int k = 0; k < 6; k++) {
+                    float x0 = faixaX + k * 6;
+                    float x1 = Math.max(r.x + 8, x0);
+                    float x2 = Math.min(r.x + r.width - 8, x0 + 6);
+                    if (x2 > x1) {
+                        f.setColor(1f, 1f, 1f, 0.05f + 0.025f * (3 - Math.abs(k - 2.5f)));
+                        f.rect(x1, r.y + 8, x2 - x1, r.height - 16);
+                    }
+                }
+                desenharBrilhos(f, r, i);
+            }
             float icx = r.x + r.width / 2;
             float icy = r.y + 244;
             f.setColor(cor.r * 0.35f, cor.g * 0.35f, cor.b * 0.35f, 1f);
@@ -357,6 +388,51 @@ class Hud {
         }
     }
 
+    /** Leque de raios de luz girando atrás da carta. */
+    private void desenharRaios(ShapeRenderer f, Rectangle r, Color cor, int i) {
+        float cx = r.x + r.width / 2;
+        float cy = r.y + r.height / 2;
+        float alcance = r.height * 0.95f;
+        int n = 12;
+        for (int k = 0; k < n; k++) {
+            float a = (k / (float) n) * MathUtils.PI2 + tempoEscolha * 0.5f + i;
+            float abertura = 0.11f;
+            f.setColor(cor.r, cor.g, cor.b, 0.13f + 0.05f * MathUtils.sin(tempoEscolha * 3f + k));
+            f.triangle(cx, cy,
+                    cx + MathUtils.cos(a - abertura) * alcance, cy + MathUtils.sin(a - abertura) * alcance,
+                    cx + MathUtils.cos(a + abertura) * alcance, cy + MathUtils.sin(a + abertura) * alcance);
+        }
+    }
+
+    /** Estrelinhas de quatro pontas correndo pela borda da carta. */
+    private void desenharBrilhos(ShapeRenderer f, Rectangle r, int i) {
+        float perimetro = 2 * (r.width + r.height);
+        for (int k = 0; k < 8; k++) {
+            float d = ((tempoEscolha * 90f + k * perimetro / 8f + i * 40f) % perimetro + perimetro) % perimetro;
+            float x;
+            float y;
+            if (d < r.width) {
+                x = r.x + d;
+                y = r.y;
+            } else if (d < r.width + r.height) {
+                x = r.x + r.width;
+                y = r.y + d - r.width;
+            } else if (d < 2 * r.width + r.height) {
+                x = r.x + r.width - (d - r.width - r.height);
+                y = r.y + r.height;
+            } else {
+                x = r.x;
+                y = r.y + r.height - (d - 2 * r.width - r.height);
+            }
+            float t = 5f + 3f * MathUtils.sin(tempoEscolha * 8f + k);
+            f.setColor(1f, 1f, 0.85f, 0.95f);
+            f.triangle(x - t, y, x + t, y, x, y + t * 2.2f);
+            f.triangle(x - t, y, x + t, y, x, y - t * 2.2f);
+            f.triangle(x, y - t, x, y + t, x + t * 2.2f, y);
+            f.triangle(x, y - t, x, y + t, x - t * 2.2f, y);
+        }
+    }
+
     /** Cor da raridade (cinza, azul, roxo, dourado) ou vermelho-sangue na carta cruel. */
     static Color corDaRaridade(Raridade r) {
         return switch (r) {
@@ -385,12 +461,13 @@ class Hud {
             Ui.textoAjustado(b, fo.subtitulo, faixa, cx, r.y + r.height - 18, interno, Align.center, Color.WHITE);
             Texture icone = jogo.icones().de(u.chave());
             if (icone != null) {
-                float lado = 80 + (cruel ? 6 * MathUtils.sin(tempoEscolha * 5f) : 0);
+                boolean pulsa = cruel || u.raridade() == Raridade.LENDARIO;
+                float lado = 80 + (pulsa ? 6 * MathUtils.sin(tempoEscolha * 5f) : 0);
                 b.setColor(Color.WHITE);
                 b.draw(icone, cx - lado / 2, r.y + 244 - lado / 2, lado, lado);
             }
             Ui.textoAjustado(b, fo.texto, u.titulo(partida), cx, r.y + 186, interno, Align.center,
-                    cruel ? Color.GOLD : Ui.BRANCO_SUAVE);
+                    cruel || u.raridade() == Raridade.LENDARIO ? Color.GOLD : Ui.BRANCO_SUAVE);
             if (cruel) {
                 Ui.texto(b, fo.textoPequeno, "EVOLUÇÃO", cx, r.y + 156, Align.center, new Color(1f, 0.45f, 0.4f, 1f));
             } else {

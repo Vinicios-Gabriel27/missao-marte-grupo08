@@ -44,6 +44,25 @@ class CartasTest {
     }
 
     @Test
+    void cartaDeVidaCuraDeVerdade() {
+        PartidaSobrevivencia p = partida();
+        p.nave().sofrerDano(80);
+        float antes = p.nave().vida();
+        new OpcaoUpgrade(UpgradeAtributo.VIDA_MAXIMA, Raridade.COMUM).aplicar(p);
+        float maxima = p.nave().atributos().vidaMaxima();
+        assertEquals(Math.min(maxima, antes + maxima * 0.4f), p.nave().vida(), 0.01f);
+        assertTrue(p.atualizar(QUADRO, Vetor.ZERO).contains(Evento.NAVE_CURADA));
+    }
+
+    @Test
+    void cartaDeVidaLendariaEncheABarra() {
+        PartidaSobrevivencia p = partida();
+        p.nave().sofrerDano(90);
+        new OpcaoUpgrade(UpgradeAtributo.VIDA_MAXIMA, Raridade.LENDARIO).aplicar(p);
+        assertEquals(p.nave().atributos().vidaMaxima(), p.nave().vida(), 0.01f);
+    }
+
+    @Test
     void armaduraReduzODanoRecebido() {
         PartidaSobrevivencia p = partida();
         new OpcaoUpgrade(UpgradeAtributo.ARMADURA, Raridade.LENDARIO).aplicar(p); // 24%

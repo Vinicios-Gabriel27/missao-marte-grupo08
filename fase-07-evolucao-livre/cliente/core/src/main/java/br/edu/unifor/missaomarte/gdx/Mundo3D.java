@@ -43,6 +43,7 @@ class Mundo3D implements Disposable {
     final PointLightEx luzMotor = new PointLightEx();
     final PointLightEx luzOrbital = new PointLightEx();
     final PointLightEx luzPlataforma = new PointLightEx();
+    final PointLightEx luzEfeito = new PointLightEx();
 
     private final ModelBatch pbrBatch;
     private final ModelBatch classicoBatch = new ModelBatch();
@@ -59,7 +60,7 @@ class Mundo3D implements Disposable {
         PBRShaderConfig config = PBRShaderProvider.createDefaultConfig();
         config.numBones = 16;
         config.numDirectionalLights = 2;
-        config.numPointLights = 3;
+        config.numPointLights = 4;
         pbrBatch = new ModelBatch(PBRShaderProvider.createDefault(config));
         sombraBatch = new ModelBatch(PBRShaderProvider.createDefaultDepth(16));
 
@@ -93,6 +94,9 @@ class Mundo3D implements Disposable {
         ambientePbr.add(luzMotor);
         ambientePbr.add(luzOrbital);
         ambientePbr.add(luzPlataforma);
+        luzEfeito.range = 10f;
+        luzEfeito.intensity = 0f;
+        ambientePbr.add(luzEfeito);
         ambientePbr.shadowMap = sol;
         ambientePbr.set(PBRCubemapAttribute.createDiffuseEnv(mapaDifuso));
         ambientePbr.set(PBRCubemapAttribute.createSpecularEnv(mapaEspecular));

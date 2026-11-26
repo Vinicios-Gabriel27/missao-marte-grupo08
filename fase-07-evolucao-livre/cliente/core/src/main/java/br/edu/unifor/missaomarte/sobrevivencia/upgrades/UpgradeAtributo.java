@@ -9,7 +9,7 @@ public enum UpgradeAtributo implements Upgrade {
     DANO("Dano", "Todos os ataques causam mais dano", 0.15f, true, AtributosNave::aumentarDano),
     CADENCIA("Cadência", "As armas disparam mais rápido", 0.15f, true, AtributosNave::aumentarCadencia),
     VELOCIDADE("Velocidade", "A nave voa mais rápido", 0.10f, true, AtributosNave::aumentarVelocidade),
-    VIDA_MAXIMA("Vida máxima", "Aumenta e recupera vida", 20f, false, AtributosNave::aumentarVidaMaxima),
+    VIDA_MAXIMA("Vida máxima", "Aumenta a vida máxima e cura na hora", 20f, false, AtributosNave::aumentarVidaMaxima),
     IMA("Ímã", "Atrai cristais de mais longe", 0.30f, true, AtributosNave::aumentarAlcanceIma),
     ARMADURA("Armadura", "Bloqueia parte do dano recebido", 0.08f, true, AtributosNave::aumentarArmadura),
     AREA("Área", "Orbitais, ondas e explosões maiores", 0.15f, true, AtributosNave::aumentarArea),
@@ -74,7 +74,10 @@ public enum UpgradeAtributo implements Upgrade {
         efeito.accept(partida.nave().atributos(), valor(r));
         partida.subirPassiva(this);
         if (this == VIDA_MAXIMA) {
-            partida.curarNave(valor(r));
+            // cura de verdade: 40% da vida máxima, escalada pela raridade (Lendário enche a barra)
+            float cura = partida.nave().atributos().vidaMaxima() * 0.4f * r.multiplicador();
+            partida.curarNave(cura);
+            partida.registrar(br.edu.unifor.missaomarte.sobrevivencia.Evento.NAVE_CURADA);
         }
     }
 }

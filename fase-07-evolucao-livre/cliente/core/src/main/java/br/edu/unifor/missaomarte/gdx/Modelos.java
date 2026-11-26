@@ -57,6 +57,10 @@ public class Modelos implements Disposable {
     public final Model aviso;
     public final Model missil;
     public final Model raio;
+    public final Model raioNucleo;
+    public final Model raioAura;
+    public final Model brilhoFogo;
+    public final Model anelFogo;
     private final Texture texturaChao;
 
     private final ModelBuilder mb = new ModelBuilder();
@@ -109,6 +113,16 @@ public class Modelos implements Disposable {
         Material eletrico = emissivo(new Color(0.6f, 0.95f, 1f, 1f));
         eletrico.set(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, 0.85f));
         raio = mb.createBox(1f, 1f, 1f, eletrico, ATRIBUTOS);
+        raioNucleo = mb.createBox(1f, 1f, 1f, emissivo(Color.WHITE), ATRIBUTOS);
+        Material aura = emissivo(new Color(0.7f, 0.45f, 1f, 1f));
+        aura.set(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, 0.4f));
+        raioAura = mb.createBox(1f, 1f, 1f, aura, ATRIBUTOS);
+        Material fogo = emissivo(new Color(1f, 0.55f, 0.12f, 1f));
+        fogo.set(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, 0.5f));
+        brilhoFogo = mb.createSphere(1f, 1f, 1f, 10, 8, fogo, ATRIBUTOS);
+        Material anelLaranja = emissivo(new Color(1f, 0.5f, 0.1f, 1f));
+        anelLaranja.set(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, 0.6f));
+        anelFogo = mb.createCylinder(2f, 0.06f, 2f, 32, anelLaranja, ATRIBUTOS);
     }
 
     private Model criarNave() {

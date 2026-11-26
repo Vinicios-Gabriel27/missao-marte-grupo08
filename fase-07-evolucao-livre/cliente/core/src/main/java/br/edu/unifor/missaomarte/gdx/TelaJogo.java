@@ -62,6 +62,14 @@ public class TelaJogo extends ScreenAdapter {
     private final ModelInstance iAviso;
     private final ModelInstance iMissil;
     private final ModelInstance iRaio;
+    private final ModelInstance iRaioNucleo;
+    private final ModelInstance iRaioAura;
+    private final ModelInstance iBrilhoFogo;
+    private final ModelInstance iAnelFogo;
+    /** Explosões de meteoro em andamento: x, z, tempo, raio final. */
+    private final java.util.List<float[]> explosoesFogo = new java.util.ArrayList<>();
+    private float flash;
+    private float picoFlash;
     private final java.util.Set<MisseisTeleguiados.Missil> misseisVistos = java.util.Collections.newSetFromMap(new IdentityHashMap<>());
     private final Map<MisseisTeleguiados.Missil, Vetor> ultimaPosMissil = new IdentityHashMap<>();
 
@@ -102,6 +110,10 @@ public class TelaJogo extends ScreenAdapter {
         iAviso = new ModelInstance(m.aviso);
         iMissil = new ModelInstance(m.missil);
         iRaio = new ModelInstance(m.raio);
+        iRaioNucleo = new ModelInstance(m.raioNucleo);
+        iRaioAura = new ModelInstance(m.raioAura);
+        iBrilhoFogo = new ModelInstance(m.brilhoFogo);
+        iAnelFogo = new ModelInstance(m.anelFogo);
         mundo.luzPlataforma.color.set(1f, 0.55f, 0.15f, 1f);
         posicionarCamera(1f);
     }
@@ -145,7 +157,15 @@ public class TelaJogo extends ScreenAdapter {
             acompanharInimigos(delta);
             atualizarRastroMotor(delta);
             particulas.atualizar(delta);
+            for (int k = explosoesFogo.size() - 1; k >= 0; k--) {
+                float[] e = explosoesFogo.get(k);
+                e[2] += delta;
+                if (e[2] > 0.5f) {
+                    explosoesFogo.remove(k);
+                }
+            }
         }
+        flash = Math.max(0, flash - delta * 4f);
         atualizarLuzes();
         mundo.desenhar(alvoCamera, cenario.instanciasPbr, this::desenharPbr, this::desenharEfeitos);
         hud.desenhar(pausado, delta, mundo.camera, toque);
@@ -183,8 +203,12 @@ public class TelaJogo extends ScreenAdapter {
             int clicado = hud.cartaoClicado();
             for (int i = 0; i < partida.opcoesUpgrade().size(); i++) {
                 if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1 + i) || clicado == i) {
+                    var escolhida = partida.opcoesUpgrade().get(i);
                     partida.escolherUpgrade(i);
                     jogo.sons().tocar("clique", 0.8f);
+                    if (!escolhida.ehEvolucao() && escolhida.raridade() == br.edu.unifor.missaomarte.sobrevivencia.upgrades.Raridade.LENDARIO) {
+                        efeitoLendario(escolhida.titulo(partida));
+                    }
                     break;
                 }
             }
@@ -226,7 +250,17 @@ public class TelaJogo extends ScreenAdapter {
                 }
                 case CHEFE_ANEL -> s.tocar("explosao", 0.6f);
                 case MISSIL_LANCADO -> s.tocar("missil", 0.35f, 0.2f);
-                case RAIO_DISPARADO -> s.tocar("raio", 0.4f, 0.15f);
+                case RAIO_DISPARADO -> {
+                    s.tocar("raio", 0.4f, 0.15f);
+                    efeitoRaio();
+                }
+                case NAVE_CURADA -> {
+                    Vetor p = partida.nave().posicao();
+                    particulas.subir(p.x(), -p.y(), 9, 40);
+                    particulas.subir(p.x(), -p.y(), 8, 12);
+                    acenderFlash(p.x(), -p.y(), 0.3f, 1f, 0.45f, 25f);
+                    s.tocar("resgate", 0.7f);
+                }
                 case EVOLUCAO -> {
                     s.tocar("evolucao", 1f);
                     tremor = 1f;
@@ -237,6 +271,53 @@ public class TelaJogo extends ScreenAdapter {
             }
             hud.notificar(e);
         }
+    }
+
+    /** Faíscas em cada inimigo atingido pelo raio; na Tempestade Elétrica, clarão e tremor. */
+    private void efeitoRaio() {
+        for (float[] e : explosoesFogo) {
+            float prog = Math.min(1f, e[2] / 0.5f);
+            float raio = e[3] * com.badlogic.gdx.math.Interpolation.pow2Out.apply(prog);
+            BlendingAttribute bl = (BlendingAttribute) iAnelFogo.materials.get(0).get(BlendingAttribute.Type);
+            bl.opacity = 0.75f * (1 - prog);
+            iAnelFogo.transform.setToTranslation(e[0], 0.25f, e[1]).scale(raio, 1f, raio);
+            batch.render(iAnelFogo, env);
+            float bola = e[3] * 0.7f * (1 - prog);
+            if (bola > 0.05f) {
+                iBrilhoFogo.transform.setToTranslation(e[0], 0.6f, e[1]).scale(bola, bola * 0.7f, bola);
+                batch.render(iBrilhoFogo, env);
+            }
+        }
+        partida.arma(RaioEmCadeia.class).ifPresent(r -> {
+            boolean evo = r.evoluida();
+            List<Vetor> c = r.ultimoCaminho();
+            for (int k = 1; k < c.size(); k++) {
+                Vetor v = c.get(k);
+                particulas.faiscas(v.x(), 1f, -v.y(), 7, evo ? 14 : 6, evo ? 9f : 6f);
+                particulas.faiscas(v.x(), 1f, -v.y(), 8, evo ? 8 : 3, evo ? 7f : 5f);
+            }
+            if (evo && c.size() > 1) {
+                Vetor meio = c.get(c.size() / 2);
+                acenderFlash(meio.x(), -meio.y(), 0.7f, 0.6f, 1f, 45f);
+                tremor = Math.min(1f, tremor + 0.12f);
+            }
+        });
+    }
+
+    private void efeitoLendario(String titulo) {
+        Vetor p = partida.nave().posicao();
+        particulas.subir(p.x(), -p.y(), 10, 50);
+        particulas.faiscas(p.x(), 1f, -p.y(), 8, 30, 10f);
+        acenderFlash(p.x(), -p.y(), 1f, 0.8f, 0.3f, 40f);
+        jogo.sons().tocar("evolucao", 0.6f, 0.2f);
+        hud.lendaria(titulo);
+    }
+
+    private void acenderFlash(float x, float z, float r, float g, float b, float intensidade) {
+        mundo.luzEfeito.position.set(x, 2f, z);
+        mundo.luzEfeito.color.set(r, g, b, 1f);
+        picoFlash = intensidade;
+        flash = 1f;
     }
 
     // ---------- desenho ----------
@@ -290,9 +371,16 @@ public class TelaJogo extends ScreenAdapter {
                     -c.posicao().y()).rotate(Vector3.Y, relogio * 120f).scale(s, s, s);
             batch.render(iCristal, env);
         }
+        boolean plasma = partida.arma(br.edu.unifor.missaomarte.sobrevivencia.armas.TiroAutomatico.class)
+                .map(t -> t.evoluida()).orElse(false);
+        float escTiro = plasma ? 1.7f : 1f;
         for (Projetil p : partida.projeteis()) {
-            iProjetil.transform.setToTranslation(p.posicao().x(), 0.8f, -p.posicao().y()).rotate(Vector3.Y, angulo(p.velocidade()));
+            iProjetil.transform.setToTranslation(p.posicao().x(), 0.8f, -p.posicao().y()).rotate(Vector3.Y, angulo(p.velocidade()))
+                    .scale(escTiro, escTiro, escTiro);
             batch.render(iProjetil, env);
+            if (plasma && env != null && MathUtils.randomBoolean(0.25f)) {
+                particulas.faiscas(p.posicao().x(), 0.8f, -p.posicao().y(), 5, 1, 1.5f);
+            }
         }
         Vetor pos = partida.nave().posicao();
         partida.arma(Orbital.class).ifPresent(o -> {
@@ -300,6 +388,9 @@ public class TelaJogo extends ScreenAdapter {
             for (Vetor e : o.posicoes(pos)) {
                 iOrbital.transform.setToTranslation(e.x(), 0.8f, -e.y()).rotate(Vector3.Y, relogio * 200f).scale(esc, esc, esc);
                 batch.render(iOrbital, env);
+                if (o.evoluida() && env != null && MathUtils.randomBoolean(0.5f)) {
+                    particulas.faiscas(e.x(), 0.8f, -e.y(), 7, 1, 2f);
+                }
             }
         });
         partida.arma(MisseisTeleguiados.class).ifPresent(mt -> {
@@ -311,8 +402,18 @@ public class TelaJogo extends ScreenAdapter {
                 iMissil.transform.setToTranslation(mi.posicao().x(), 1.1f, -mi.posicao().y()).rotate(Vector3.Y, angulo(mi.direcao()))
                         .scale(escala, escala, escala);
                 batch.render(iMissil, env);
-                if (env != null && MathUtils.randomBoolean(0.6f)) {
-                    particulas.rastro(mi.posicao().x() - mi.direcao().x() * 0.5f, 1.1f, -(mi.posicao().y() - mi.direcao().y() * 0.5f));
+                float tx = mi.posicao().x() - mi.direcao().x() * 0.6f;
+                float tz = -(mi.posicao().y() - mi.direcao().y() * 0.6f);
+                if (mt.evoluida()) {
+                    // meteoro: bola de fogo pulsando em volta do míssil e rastro grosso
+                    float b = 1.3f + 0.2f * MathUtils.sin(relogio * 25f + mi.posicao().x());
+                    iBrilhoFogo.transform.setToTranslation(mi.posicao().x(), 1.1f, -mi.posicao().y()).scale(b, b, b);
+                    batch.render(iBrilhoFogo, env);
+                    if (env != null) {
+                        particulas.rastroFogo(tx, 1.1f, tz);
+                    }
+                } else if (env != null && MathUtils.randomBoolean(0.6f)) {
+                    particulas.rastro(tx, 1.1f, tz);
                 }
             }
             if (env != null) {
@@ -320,8 +421,18 @@ public class TelaJogo extends ScreenAdapter {
                     if (!agora.contains(antigo)) {
                         Vetor ex = ultimaPosMissil.remove(antigo);
                         if (ex != null) {
-                            particulas.explosao(ex.x(), -ex.y(), 4, mt.evoluida() ? 26 : 12, mt.evoluida() ? 11f : 7f);
-                            jogo.sons().tocar("explosao", 0.3f, 0.05f);
+                            if (mt.evoluida()) {
+                                particulas.explosao(ex.x(), -ex.y(), 4, 40, 13f);
+                                particulas.explosao(ex.x(), -ex.y(), 10, 16, 9f);
+                                particulas.faiscas(ex.x(), 0.8f, -ex.y(), 8, 14, 12f);
+                                explosoesFogo.add(new float[] {ex.x(), -ex.y(), 0f, mt.raioExplosao(partida)});
+                                acenderFlash(ex.x(), -ex.y(), 1f, 0.5f, 0.12f, 50f);
+                                tremor = Math.min(1f, tremor + 0.15f);
+                                jogo.sons().tocar("explosao_grande", 0.35f, 0.1f);
+                            } else {
+                                particulas.explosao(ex.x(), -ex.y(), 4, 12, 7f);
+                                jogo.sons().tocar("explosao", 0.3f, 0.05f);
+                            }
                         }
                     }
                 }
@@ -330,20 +441,33 @@ public class TelaJogo extends ScreenAdapter {
             }
         });
         partida.arma(RaioEmCadeia.class).ifPresent(r -> {
-            if (r.tempoDesdeDisparo() < 0.18f && r.ultimoCaminho().size() > 1) {
+            boolean evo = r.evoluida();
+            float duracao = evo ? 0.3f : 0.18f;
+            if (r.tempoDesdeDisparo() < duracao && r.ultimoCaminho().size() > 1) {
                 java.util.List<Vetor> c = r.ultimoCaminho();
-                float espessura = (r.evoluida() ? 0.22f : 0.14f) * (1f - r.tempoDesdeDisparo() / 0.18f) + 0.04f;
+                float vida = 1f - r.tempoDesdeDisparo() / duracao;
+                // na evolução o raio tremeluz: alguns quadros some e volta
+                if (evo && vida < 0.7f && MathUtils.randomBoolean(0.2f)) {
+                    return;
+                }
+                float espessura = (evo ? 0.2f : 0.12f) * vida + 0.04f;
+                float desvio = evo ? 0.8f : 0.5f;
                 for (int k = 0; k + 1 < c.size(); k++) {
                     Vetor a = c.get(k);
                     Vetor bb = c.get(k + 1);
-                    // segmento em zigue-zague: dois pedaços com um desvio no meio
-                    Vetor meio = a.mais(bb).vezes(0.5f).mais(new Vetor(MathUtils.random(-0.5f, 0.5f), MathUtils.random(-0.5f, 0.5f)));
-                    for (Vetor[] seg : new Vetor[][] {{a, meio}, {meio, bb}}) {
-                        Vetor d = seg[1].menos(seg[0]);
-                        Vetor m2 = seg[0].mais(d.vezes(0.5f));
-                        iRaio.transform.setToTranslation(m2.x(), 1.0f, -m2.y()).rotate(Vector3.Y, angulo(d))
-                                .scale(espessura, espessura, d.comprimento());
-                        batch.render(iRaio, env);
+                    // segmento em zigue-zague com pontos de desvio no meio
+                    int partes = evo ? 4 : 2;
+                    Vetor anterior = a;
+                    for (int q = 1; q <= partes; q++) {
+                        Vetor prox = q == partes ? bb : a.mais(bb.menos(a).vezes(q / (float) partes))
+                                .mais(new Vetor(MathUtils.random(-desvio, desvio), MathUtils.random(-desvio, desvio)));
+                        segmentoRaio(batch, env, anterior, prox, espessura, evo);
+                        if (evo && q < partes && MathUtils.randomBoolean(0.45f)) {
+                            // galhos finos saindo do raio principal
+                            Vetor galho = prox.mais(new Vetor(MathUtils.random(-1.6f, 1.6f), MathUtils.random(-1.6f, 1.6f)));
+                            segmentoRaio(batch, env, prox, galho, espessura * 0.45f, true);
+                        }
+                        anterior = prox;
                     }
                 }
             }
@@ -357,6 +481,19 @@ public class TelaJogo extends ScreenAdapter {
                 b.opacity = 0.6f * (1 - progresso);
                 iOnda.transform.setToTranslation(pos.x(), 0.3f, -pos.y()).scale(r, 1f, r);
                 batch.render(iOnda, env);
+                if (o.evoluida()) {
+                    // Terremoto Marciano: segundo anel atrasado e poeira levantando na borda
+                    float r2 = o.raio() * Math.max(0, progresso - 0.25f) / 0.75f;
+                    b.opacity = 0.45f * (1 - progresso);
+                    iOnda.transform.setToTranslation(pos.x(), 0.35f, -pos.y()).scale(r2, 1.5f, r2);
+                    batch.render(iOnda, env);
+                    if (env != null) {
+                        for (int k = 0; k < 4; k++) {
+                            float a = MathUtils.random(MathUtils.PI2);
+                            particulas.faiscas(pos.x() + MathUtils.cos(a) * r, 0.3f, -pos.y() + MathUtils.sin(a) * r, 4, 1, 3f);
+                        }
+                    }
+                }
             }
         });
         Vetor alvo = partida.plataformaAberta() ? Vetor.ZERO
@@ -395,6 +532,25 @@ public class TelaJogo extends ScreenAdapter {
         particulas.desenharPoeira(batch, env, alvoCamera.x, alvoCamera.z, relogio);
     }
 
+    /** Um pedaço do raio: núcleo branco, corpo azul e (na evolução) aura roxa larga. */
+    private void segmentoRaio(ModelBatch batch, Environment env, Vetor a, Vetor b, float espessura, boolean evo) {
+        Vetor d = b.menos(a);
+        float comp = d.comprimento();
+        if (comp < 0.01f) {
+            return;
+        }
+        Vetor m = a.mais(d.vezes(0.5f));
+        float ang = angulo(d);
+        if (evo) {
+            iRaioAura.transform.setToTranslation(m.x(), 1.0f, -m.y()).rotate(Vector3.Y, ang).scale(espessura * 3.5f, espessura * 3.5f, comp);
+            batch.render(iRaioAura, env);
+        }
+        iRaio.transform.setToTranslation(m.x(), 1.0f, -m.y()).rotate(Vector3.Y, ang).scale(espessura * 1.6f, espessura * 1.6f, comp);
+        batch.render(iRaio, env);
+        iRaioNucleo.transform.setToTranslation(m.x(), 1.0f, -m.y()).rotate(Vector3.Y, ang).scale(espessura * 0.5f, espessura * 0.5f, comp);
+        batch.render(iRaioNucleo, env);
+    }
+
     /** Ângulo (graus, em torno de Y) para um modelo com frente em +Z olhar na direção do domínio. */
     private static float angulo(Vetor direcao) {
         return MathUtils.atan2(direcao.x(), -direcao.y()) * MathUtils.radiansToDegrees;
@@ -411,6 +567,7 @@ public class TelaJogo extends ScreenAdapter {
             mundo.luzOrbital.position.set(e.x(), 1f, -e.y());
             mundo.luzOrbital.intensity = 7f;
         });
+        mundo.luzEfeito.intensity = picoFlash * flash;
         if (partida.plataformaAberta()) {
             mundo.luzPlataforma.color.set(0.2f, 1f, 0.35f, 1f);
             mundo.luzPlataforma.intensity = 30f + MathUtils.sin(relogio * 5f) * 8f;
@@ -517,7 +674,36 @@ public class TelaJogo extends ScreenAdapter {
         return dir;
     }
 
+    private boolean demoEvoluiu;
+
+    /** No CI: aos 10 s entrega todas as armas evoluídas, para as capturas mostrarem os efeitos completos. */
+    private void evoluirTudoNaDemonstracao() {
+        demoEvoluiu = true;
+        var r = br.edu.unifor.missaomarte.sobrevivencia.upgrades.Raridade.LENDARIO;
+        var catalogo = java.util.List.of(
+                new br.edu.unifor.missaomarte.sobrevivencia.upgrades.UpgradeArma<>(br.edu.unifor.missaomarte.sobrevivencia.armas.TiroAutomatico.class,
+                        br.edu.unifor.missaomarte.sobrevivencia.armas.TiroAutomatico::new, "", "tiro"),
+                new br.edu.unifor.missaomarte.sobrevivencia.upgrades.UpgradeArma<>(Orbital.class, Orbital::new, "", "orbital"),
+                new br.edu.unifor.missaomarte.sobrevivencia.upgrades.UpgradeArma<>(OndaDeChoque.class, OndaDeChoque::new, "", "onda"),
+                new br.edu.unifor.missaomarte.sobrevivencia.upgrades.UpgradeArma<>(MisseisTeleguiados.class, MisseisTeleguiados::new, "", "missil"),
+                new br.edu.unifor.missaomarte.sobrevivencia.upgrades.UpgradeArma<>(RaioEmCadeia.class, RaioEmCadeia::new, "", "raio"));
+        for (var u : catalogo) {
+            for (int k = 0; k < 5 && u.disponivel(partida); k++) {
+                u.aplicar(partida, r);
+            }
+        }
+        for (var e : br.edu.unifor.missaomarte.sobrevivencia.upgrades.Evolucao.values()) {
+            e.aplicar(partida, r);
+        }
+        for (int k = 0; k < 5; k++) {
+            br.edu.unifor.missaomarte.sobrevivencia.upgrades.UpgradeAtributo.VIDA_MAXIMA.aplicar(partida, r);
+        }
+    }
+
     private void capturarDemonstracao() {
+        if (!demoEvoluiu && relogio > 10f && partida.estado() == EstadoPartida.EM_ANDAMENTO) {
+            evoluirTudoNaDemonstracao();
+        }
         float[] instantes = {4f, 15f, 30f, 45f};
         if (capturas < instantes.length && relogio >= instantes[capturas]) {
             jogo.salvarCaptura("captura-" + capturas + ".png");
