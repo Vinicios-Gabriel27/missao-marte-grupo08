@@ -1,0 +1,75 @@
+// App Android: só o ponto de entrada e a configuração do aparelho. O jogo todo está em :core.
+plugins {
+    id 'com.android.application' version '9.4.1'
+}
+
+repositories {
+    google()
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+}
+
+android {
+    namespace = 'br.edu.unifor.missaomarte.android'
+    compileSdk = 36
+
+    defaultConfig {
+        applicationId = 'br.edu.unifor.missaomarte'
+        minSdk = 26
+        targetSdk = 36
+        versionCode = 1
+        versionName = '1.0'
+    }
+
+    buildTypes {
+        debug {
+            // HTTP sem criptografia só no build de teste (emulador/rede local).
+            manifestPlaceholders = [usaHttpSemCriptografia: 'true']
+        }
+        release {
+            manifestPlaceholders = [usaHttpSemCriptografia: 'false']
+            minifyEnabled = false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    sourceSets {
+        main {
+            // Os mesmos modelos, fontes e sons do desktop.
+            assets.srcDirs = ['../assets']
+            // Bibliotecas nativas da libGDX extraídas dos .jar (tarefas abaixo).
+            jniLibs.srcDirs = [layout.buildDirectory.dir('nativas').get().asFile]
+        }
+    }
+}
+
+configurations {
+    nativas
+}
+
+dependencies {
+    implementation project(':core')
+    implementation "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
+    ['armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'].each { abi ->
+        nativas "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-$abi"
+        nativas "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-$abi"
+    }
+}
+
+// A libGDX entrega os .so dentro de .jar: cada tarefa extrai os de uma arquitetura para build/nativas/<abi>.
+def extracoes = ['armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'].collect { abi ->
+    tasks.register("extrairNativas_${abi}", Sync) {
+        from { configurations.nativas.files.findAll { it.name.endsWith("natives-${abi}.jar") }.collect { zipTree(it) } }
+        include '*.so'
+        into layout.buildDirectory.dir("nativas/${abi}")
+    }
+}
+
+tasks.matching { it.name.contains('JniLib') || it.name.startsWith('merge') && it.name.contains('NativeLibs') }.configureEach {
+    dependsOn extracoes
+}
+tasks.named('preBuild').configure { dependsOn extracoes }
