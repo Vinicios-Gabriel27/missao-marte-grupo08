@@ -1,67 +1,40 @@
-# Fase 3 — libGDX 3D: modo sobrevivência
+# Fase 4 — Interface gráfica: menu 3D, fontes, sons, HUD e ranking local
 
-O Missão Marte vira um jogo de sobrevivência em 3D (estilo Vampire Survivors / Megabonk).
-Design completo em [`docs/design-jogo.md`](../docs/design-jogo.md).
+Evolução da Fase 3 (o domínio `sobrevivencia` é o mesmo). Esta fase cuida da apresentação.
 
 ## Executar (JDK 17+)
 
 ```bash
-cd fase-03-libgdx
+cd fase-04-interface-grafica
 ./gradlew :lwjgl3:run      # Windows: .\gradlew.bat :lwjgl3:run
-./gradlew test             # testes do domínio (sem abrir janela)
+./gradlew test
 ```
 
-## Controles
+## O que há nesta fase
 
-| Tecla | Ação |
+| Recurso | Onde |
 |---|---|
-| WASD / setas | mover a nave |
-| (automático) | atirar no inimigo mais próximo |
-| 1 / 2 / 3 ou clique | escolher upgrade ao subir de nível |
-| P / Esc | pausar (Q no pause volta ao menu) |
+| **Menu** com fundo 3D animado (base marciana, nave, passageiros, alienígenas), botões com mouse/teclado/toque, nome do piloto, dificuldade, som | `TelaMenu`, `CenaVitrine`, `Botao` |
+| **Fontes TTF** geradas em tempo de execução (gdx-freetype): Orbitron (títulos) e Rajdhani (textos) — licença OFL | `Fontes`, `assets/fontes` |
+| **Sons e música** sintetizados para o projeto; sons frequentes têm limite de repetição | `Sons`, `assets/sons` |
+| **HUD** em painéis: vida animada, XP, tempo e objetivo, nível, passageiros, barra do chefe, números de dano, alerta de vida baixa | `Hud`, `Ui` |
+| **Cartões de upgrade** animados, com cor por tipo (atributo/arma) | `Hud` |
+| **Tela final** com estatísticas, pontuação e posição no ranking | `TelaFim` |
+| **Ranking local** (Top 10, arquivo JSON) | `ranking/ServicoRanking` (Java puro, testado) + `gdx/RepositorioRankingLocal` |
+| **Renderização compartilhada** (PBR, sombras, névoa, luzes dinâmicas, bloom, cor, vinheta) criada uma vez | `Mundo3D`, `PosProcessamento` |
 
-## Estrutura
+## Recursos e ciclo de vida
 
-```
-core/
-  sobrevivencia/        regras do jogo — Java puro, nenhum import da libGDX
-    PartidaSobrevivencia   laço do jogo: atualizar(delta, direção) → eventos
-    CampoDeBatalha         o que as armas podem ver/fazer (ISP)
-    armas/                 Strategy: TiroAutomatico, Orbital, OndaDeChoque
-    upgrades/              Upgrade, UpgradeAtributo, UpgradeArma, SorteadorUpgrades
-    Passageiro             Professor (+XP), Engenheiro (regeneração), Astronauta (+dano)
-    GeradorOndas, CronogramaPassageiros   interfaces injetadas (DIP; testes usam "nenhum")
-  gdx/                  apresentação libGDX
-    MissaoMarteJogo        Game: recursos 2D compartilhados e troca de telas
-    TelaMenu, TelaJogo, TelaFim
-    Modelos                modelos 3D low-poly gerados por código (ModelBuilder)
-    Hud                    vida, XP, tempo, armas, avisos e cartões de upgrade
-lwjgl3/                 janela desktop (Lwjgl3Launcher)
-```
+Recursos caros (modelos, shaders, fontes, sons) são criados uma vez em `MissaoMarteJogo.create()`
+e liberados em `dispose()`. As telas só reutilizam. Cada tela desenha o 3D com `Mundo3D.desenhar(...)`
+passando *o que* desenhar; a ordem das passadas (sombras → PBR → efeitos → pós-processamento) fica num lugar só.
 
-## Gráficos
+## Ranking local (arquitetura)
 
-- Modelos 3D dos pacotes **Kenney Space Kit** e **Mini Characters** (licença CC0, em `assets/modelos`),
-  carregados com a extensão **gdx-gltf** e desenhados com **renderização PBR** (luz de ambiente IBL em tons de Marte).
-- Personagens animados: inimigos andam/correm, passageiros acenam.
-- Sombras do sol, névoa, chão com textura gerada por código, explosões em partículas, rastro do motor.
+`ServicoRanking` depende da interface `RepositorioRanking` (DIP). Aqui a implementação é um arquivo JSON
+local; na Fase 5 o ranking global entra como outra implementação, sem mudar o serviço.
 
-| Elemento | Modelo |
-|---|---|
-| Nave | `craft_speederA` |
-| Perseguidor / Rápido / Tanque / Chefe | `character-alien` / `character-zombie` / `character-robot` / `character-knight` |
-| Professor / Engenheiro / Astronauta | `character-male-b` / `character-worker` / `astronautA` |
-| Cenário | rochas, cristais, crateras, hangar, antena, torreta, rover, gerador |
+## Créditos
 
-## Ciclo de vida libGDX
-
-`create()` cria os recursos (fonte, SpriteBatch) → `render()` roda a cada quadro
-(lê o controle, chama `partida.atualizar`, desenha o 3D e o HUD) → `resize()` ajusta a câmera →
-`pause()` pausa a partida → `dispose()` libera modelos e batches. O domínio não participa do
-ciclo de vida: só recebe o `delta` e a direção, por isso é testado sem OpenGL.
-
-## Testes
-
-`core/src/test`: movimento e limites da arena, perseguição e dano, tiro automático, XP e
-subida de nível (pausa para escolha), ímã, bônus e capacidade dos passageiros, regeneração,
-abertura da plataforma, vitória, derrota, orbital, limite de nível das armas, ondas e cronograma.
+Modelos 3D: Kenney (CC0). Fontes: Orbitron e Rajdhani (SIL Open Font License; o til da Orbitron foi
+redesenhado para o português). Sons e música: gerados por síntese para este projeto.

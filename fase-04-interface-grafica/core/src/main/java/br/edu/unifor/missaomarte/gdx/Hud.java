@@ -107,7 +107,7 @@ class Hud {
         // Tempo / objetivo
         Ui.painel(f, w / 2 - 170, h - 104, 340, 66, Ui.LARANJA);
         // Status (direita)
-        Ui.painel(f, w - 286, h - 120, 270, 82, Ui.CIANO);
+        Ui.painel(f, w - 286, h - 146, 270, 108, Ui.CIANO);
         // Chefe
         if (chefe != null) {
             Ui.painel(f, w / 2 - 300, 26, 600, 52, new Color(1f, 0.2f, 0.2f, 1f));
@@ -152,7 +152,6 @@ class Hud {
             Color cor = n.grande ? new Color(1f, 0.85f, 0.2f, Math.min(1, n.vida * 2)) : new Color(1f, 1f, 1f, Math.min(1, n.vida * 2));
             Ui.texto(b, n.grande ? fo.numero : fo.textoPequeno, n.texto, x, y, Align.center, cor);
         }
-        Ui.texto(b, fo.textoPequeno, "NÍVEL " + partida.nivel(), w - 22, h - 34, Align.right, Ui.CIANO);
         Ui.texto(b, fo.textoPequeno, "VIDA", 30, h - 50, Align.left, Ui.CINZA);
         Ui.texto(b, fo.textoPequeno, (int) nave.vida() + " / " + (int) vidaMax, 330, h - 50, Align.right, Ui.BRANCO_SUAVE);
         int t = (int) partida.tempo();
@@ -169,10 +168,11 @@ class Hud {
                     : "Resgate mais " + faltam + " passageiro" + (faltam == 1 ? "" : "s");
         }
         Ui.texto(b, fo.textoPequeno, objetivo, w / 2, h - 82, Align.center, corObjetivo);
+        Ui.texto(b, fo.subtitulo, "NÍVEL " + partida.nivel(), w - 270, h - 54, Align.left, Color.GOLD);
         Ui.texto(b, fo.texto, "Passageiros  " + partida.passageirosResgatados() + "/" + partida.totalPassageiros(),
-                w - 270, h - 56, Align.left, Ui.CIANO);
+                w - 270, h - 84, Align.left, Ui.CIANO);
         Ui.texto(b, fo.textoPequeno, "Abates " + partida.inimigosDerrotados() + "    " + partida.pontuacao() + " pts",
-                w - 270, h - 90, Align.left, Ui.BRANCO_SUAVE);
+                w - 270, h - 116, Align.left, Ui.BRANCO_SUAVE);
         if (chefe != null) {
             Ui.texto(b, fo.subtitulo, "GUARDIÃO DE MARTE", w / 2, 92, Align.center, new Color(1f, 0.4f, 0.35f, 1f));
         }

@@ -13,7 +13,7 @@ Evolução do jogo **Missão Marte Unifor**: de uma aplicação Java de console 
 | 1 — Refatoração arquitetural | `fase-01-refatoracao` | 1 | Concluída |
 | 2 — Gradle + JUnit 5 | `fase-02-gradle` | 1 | Concluída |
 | 3 — libGDX 3D (modo sobrevivência) | `fase-03-libgdx` | 2 | Jogável |
-| 4 — Interface gráfica | `fase-04-interface-grafica` | 2 | Pendente |
+| 4 — Interface gráfica (menu 3D, sons, HUD, ranking local) | `fase-04-interface-grafica` | 2 | Jogável |
 | 5 — Servidor e ranking global | `fase-05-servidor-ranking` | 3 | Pendente |
 | 6 — Android | `fase-06-android` | 4 | Pendente |
 | 7 — Evolução livre | `fase-07-evolucao-livre` | 4 | Pendente |
