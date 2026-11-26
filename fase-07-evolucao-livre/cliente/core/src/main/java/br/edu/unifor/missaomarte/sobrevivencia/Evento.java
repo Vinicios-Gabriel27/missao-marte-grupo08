@@ -17,6 +17,10 @@ public enum Evento {
     CHEFE_INVESTIU,
     CHEFE_ANEL,
     PODER_ATIVADO,
+    CRITICO,
+    MISSIL_LANCADO,
+    RAIO_DISPARADO,
+    EVOLUCAO,
     VITORIA,
     DERROTA
 }

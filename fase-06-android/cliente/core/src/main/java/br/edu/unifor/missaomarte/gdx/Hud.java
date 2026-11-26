@@ -278,8 +278,8 @@ class Hud {
             Rectangle r = cartoes[i];
             Upgrade u = opcoes.get(i);
             Ui.texto(b, fo.titulo, String.valueOf(i + 1), r.x + r.width / 2, r.y + r.height - 55, Align.center, corDoUpgrade(u));
-            Ui.texto(b, fo.texto, SorteadorUpgrades.tituloPara(u, partida), r.x + r.width / 2, r.y + 100, Align.center, Ui.BRANCO_SUAVE);
-            Ui.texto(b, fo.textoPequeno, u.descricao(), r.x + r.width / 2, r.y + 58, Align.center, Ui.CINZA);
+            Ui.textoAjustado(b, fo.texto, SorteadorUpgrades.tituloPara(u, partida), r.x + r.width / 2, r.y + 100, r.width - 28, Align.center, Ui.BRANCO_SUAVE);
+            Ui.textoAjustado(b, fo.textoPequeno, u.descricao(), r.x + r.width / 2, r.y + 58, r.width - 28, Align.center, Ui.CINZA);
         }
     }
 

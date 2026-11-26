@@ -20,6 +20,7 @@ public class MissaoMarteJogo extends Game {
     private SpriteBatch batch;
     private ShapeRenderer formas;
     private Fontes fontes;
+    private Icones icones;
     private Sons sons;
     private Mundo3D mundo;
     private CenaVitrine vitrine;
@@ -32,6 +33,7 @@ public class MissaoMarteJogo extends Game {
         batch = new SpriteBatch();
         formas = new ShapeRenderer();
         fontes = new Fontes();
+        icones = new Icones();
         sons = new Sons();
         mundo = new Mundo3D();
         vitrine = new CenaVitrine(mundo);
@@ -113,6 +115,10 @@ public class MissaoMarteJogo extends Game {
         return fontes;
     }
 
+    Icones icones() {
+        return icones;
+    }
+
     Sons sons() {
         return sons;
     }
@@ -143,6 +149,7 @@ public class MissaoMarteJogo extends Game {
         batch.dispose();
         formas.dispose();
         fontes.dispose();
+        icones.dispose();
         sons.dispose();
         mundo.dispose();
     }

@@ -2,7 +2,7 @@ package br.edu.unifor.missaomarte.sobrevivencia.upgrades;
 
 import br.edu.unifor.missaomarte.sobrevivencia.PartidaSobrevivencia;
 
-/** Opção mostrada ao subir de nível. */
+/** Carta oferecida ao subir de nível. */
 public interface Upgrade {
     String titulo();
 
@@ -12,6 +12,16 @@ public interface Upgrade {
     }
 
     String descricao();
+
+    /** Identificador do ícone da carta (a tela escolhe a imagem por ele). */
+    String chave();
+
+    /** Nível atual da carta nesta partida (0 = ainda não tem). */
+    int nivelAtual(PartidaSobrevivencia partida);
+
+    default int nivelMaximo() {
+        return 5;
+    }
 
     boolean disponivel(PartidaSobrevivencia partida);
 

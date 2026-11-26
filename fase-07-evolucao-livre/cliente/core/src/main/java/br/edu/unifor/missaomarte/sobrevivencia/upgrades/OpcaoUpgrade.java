@@ -23,4 +23,27 @@ public record OpcaoUpgrade(Upgrade upgrade, Raridade raridade) {
     public boolean ehArma() {
         return upgrade instanceof UpgradeArma<?>;
     }
+
+    /** Carta cruel (evolução). */
+    public boolean ehEvolucao() {
+        return upgrade instanceof Evolucao;
+    }
+
+    public String chave() {
+        return upgrade.chave();
+    }
+
+    public int nivelAtual(PartidaSobrevivencia partida) {
+        return upgrade.nivelAtual(partida);
+    }
+
+    /** Nível que a carta terá depois de escolhida. */
+    public int nivelDepois(PartidaSobrevivencia partida) {
+        int sobe = ehArma() ? raridade.niveisDeArma() : 1;
+        return Math.min(upgrade.nivelMaximo(), upgrade.nivelAtual(partida) + sobe);
+    }
+
+    public int nivelMaximo() {
+        return upgrade.nivelMaximo();
+    }
 }

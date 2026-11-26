@@ -33,7 +33,7 @@ public class Nave {
         if (invulneravel > 0) {
             return;
         }
-        vida = Math.max(0, vida - dano);
+        vida = Math.max(0, vida - dano * (1f - atributos.armadura()));
     }
 
     void ficarInvulneravel(float segundos) {

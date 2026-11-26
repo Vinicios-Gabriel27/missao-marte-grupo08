@@ -4,13 +4,16 @@ import br.edu.unifor.missaomarte.sobrevivencia.AtributosNave;
 import br.edu.unifor.missaomarte.sobrevivencia.PartidaSobrevivencia;
 import java.util.function.BiConsumer;
 
-/** Upgrades de atributo: sempre disponíveis, acumuláveis e escalados pela raridade. */
+/** Cartas passivas (nível 1 a 5), escaladas pela raridade. */
 public enum UpgradeAtributo implements Upgrade {
     DANO("Dano", "Todos os ataques causam mais dano", 0.15f, true, AtributosNave::aumentarDano),
     CADENCIA("Cadência", "As armas disparam mais rápido", 0.15f, true, AtributosNave::aumentarCadencia),
-    VELOCIDADE("Velocidade", "A nave se move mais rápido", 0.10f, true, AtributosNave::aumentarVelocidade),
+    VELOCIDADE("Velocidade", "A nave voa mais rápido", 0.10f, true, AtributosNave::aumentarVelocidade),
     VIDA_MAXIMA("Vida máxima", "Aumenta e recupera vida", 20f, false, AtributosNave::aumentarVidaMaxima),
-    IMA("Ímã", "Atrai cristais de XP de mais longe", 0.30f, true, AtributosNave::aumentarAlcanceIma);
+    IMA("Ímã", "Atrai cristais de mais longe", 0.30f, true, AtributosNave::aumentarAlcanceIma),
+    ARMADURA("Armadura", "Bloqueia parte do dano recebido", 0.08f, true, AtributosNave::aumentarArmadura),
+    AREA("Área", "Orbitais, ondas e explosões maiores", 0.15f, true, AtributosNave::aumentarArea),
+    CRITICO("Crítico", "Chance de causar dano dobrado", 0.08f, true, AtributosNave::aumentarCritico);
 
     private final String nome;
     private final String descricao;
@@ -31,6 +34,10 @@ public enum UpgradeAtributo implements Upgrade {
         return valorBase * r.multiplicador();
     }
 
+    public String nome() {
+        return nome;
+    }
+
     @Override
     public String titulo() {
         return titulo(null, Raridade.COMUM);
@@ -48,13 +55,24 @@ public enum UpgradeAtributo implements Upgrade {
     }
 
     @Override
+    public String chave() {
+        return name().toLowerCase();
+    }
+
+    @Override
+    public int nivelAtual(PartidaSobrevivencia partida) {
+        return partida.nivelPassiva(this);
+    }
+
+    @Override
     public boolean disponivel(PartidaSobrevivencia partida) {
-        return true;
+        return partida.nivelPassiva(this) < nivelMaximo();
     }
 
     @Override
     public void aplicar(PartidaSobrevivencia partida, Raridade r) {
         efeito.accept(partida.nave().atributos(), valor(r));
+        partida.subirPassiva(this);
         if (this == VIDA_MAXIMA) {
             partida.curarNave(valor(r));
         }

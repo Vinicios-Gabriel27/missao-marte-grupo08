@@ -14,6 +14,7 @@ import br.edu.unifor.missaomarte.sobrevivencia.upgrades.Raridade;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Interpolation;
@@ -64,6 +65,10 @@ class Hud {
             case PLATAFORMA_ABERTA -> avisar("PLATAFORMA ABERTA!  Volte ao centro", new Color(0.4f, 1f, 0.5f, 1f));
             case CHEFE_APARECEU -> avisar("O GUARDIÃO DESPERTOU!", new Color(1f, 0.3f, 0.25f, 1f));
             case SUBIU_NIVEL -> tempoEscolha = 0;
+            case EVOLUCAO -> {
+                var ev = partida.evolucoes();
+                avisar("CARTA CRUEL: " + ev.get(ev.size() - 1).titulo() + "!", new Color(1f, 0.3f, 0.2f, 1f));
+            }
             default -> { }
         }
     }
@@ -167,6 +172,24 @@ class Hud {
                 f.circle(cx, cy, raioPoder * 0.72f, 36);
             }
         }
+        // bolinhas de nível das armas (ao lado dos nomes, no canto inferior esquerdo)
+        float yArma = 40 + 26 * partida.arsenal().size();
+        for (Arma a : partida.arsenal()) {
+            for (int k = 0; k < a.nivelMaximo(); k++) {
+                float px = 232 + k * 15;
+                float py = yArma - 8;
+                f.setColor(0, 0, 0, 0.6f);
+                f.circle(px, py, 6, 12);
+                if (a.evoluida()) {
+                    f.setColor(1f, 0.75f, 0.15f, 1f);
+                    f.circle(px, py, 5, 12);
+                } else if (k < a.nivel()) {
+                    f.setColor(0.35f, 0.9f, 1f, 1f);
+                    f.circle(px, py, 4.5f, 12);
+                }
+            }
+            yArma -= 26;
+        }
         if (escolhendo || pausado) {
             f.setColor(0, 0, 0, 0.62f);
             f.rect(0, 0, w, h);
@@ -231,8 +254,7 @@ class Hud {
         float y = 40 + 26 * partida.arsenal().size();
         Ui.texto(b, fo.subtitulo, "ARMAS", 22, y + 30, Align.left, Ui.LARANJA);
         for (Arma a : partida.arsenal()) {
-            String nivel = a.noNivelMaximo() ? "MÁX" : "nv " + a.nivel();
-            Ui.texto(b, fo.textoPequeno, a.nome() + "   " + nivel, 22, y, Align.left, Ui.BRANCO_SUAVE);
+            Ui.texto(b, fo.textoPequeno, a.nomeAtual(), 22, y, Align.left, a.evoluida() ? Color.GOLD : Ui.BRANCO_SUAVE);
             y -= 26;
         }
         List<Passageiro> bordo = nave.passageirosABordo();
@@ -278,59 +300,107 @@ class Hud {
         b.end();
     }
 
+    private static final float CARTA_L = 236;
+    private static final float CARTA_A = 336;
+
     private void desenharFundoCartoes(ShapeRenderer f, float w, float h) {
         int n = partida.opcoesUpgrade().size();
-        float largura = 300;
-        float altura = 230;
-        float total = n * largura + (n - 1) * 30;
+        float total = n * CARTA_L + (n - 1) * 34;
         float x0 = (w - total) / 2;
         for (int i = 0; i < n; i++) {
-            float atraso = Math.max(0, Math.min(1, (tempoEscolha - i * 0.07f) * 5f));
-            float sobe = (1 - Interpolation.swingOut.apply(atraso)) * -60;
-            Rectangle r = cartoes[i].set(x0 + i * (largura + 30), h / 2 - altura / 2 - 20 + sobe, largura, altura);
+            OpcaoUpgrade u = partida.opcoesUpgrade().get(i);
+            float atraso = Math.max(0, Math.min(1, (tempoEscolha - i * 0.08f) * 4.5f));
+            float sobe = (1 - Interpolation.swingOut.apply(atraso)) * -80;
+            Rectangle r = cartoes[i].set(x0 + i * (CARTA_L + 34), h / 2 - CARTA_A / 2 - 30 + sobe, CARTA_L, CARTA_A);
             boolean sobre = Ui.mouseSobre(r);
-            Color cor = corDoUpgrade(partida.opcoesUpgrade().get(i));
-            if (sobre) {
-                Ui.retanguloArredondado(f, r.x - 6, r.y - 6, r.width + 12, r.height + 12, 18, new Color(cor.r, cor.g, cor.b, 0.35f));
+            float flutua = sobre ? 10 : 0;
+            r.y += flutua;
+            Color cor = corDoUpgrade(u);
+            boolean cruel = u.ehEvolucao();
+            // brilho externo (pulsa na carta cruel)
+            float pulso = cruel ? 0.35f + 0.25f * MathUtils.sin(tempoEscolha * 6f) : (sobre ? 0.4f : 0.18f);
+            Ui.retanguloArredondado(f, r.x - 8, r.y - 8, r.width + 16, r.height + 16, 22, new Color(cor.r, cor.g, cor.b, pulso));
+            // moldura e corpo
+            Ui.retanguloArredondado(f, r.x, r.y, r.width, r.height, 18, cor);
+            Color corpo = cruel ? new Color(0.22f, 0.03f, 0.05f, 1f) : new Color(0.1f, 0.07f, 0.09f, 1f);
+            Ui.retanguloArredondado(f, r.x + 6, r.y + 6, r.width - 12, r.height - 12, 14, corpo);
+            // faixa do topo (raridade) e moldura do ícone
+            Ui.retanguloArredondado(f, r.x + 6, r.y + r.height - 44, r.width - 12, 38, 12, new Color(cor.r, cor.g, cor.b, 0.85f));
+            float icx = r.x + r.width / 2;
+            float icy = r.y + r.height - 118;
+            f.setColor(cor.r * 0.35f, cor.g * 0.35f, cor.b * 0.35f, 1f);
+            f.circle(icx, icy, 62, 40);
+            f.setColor(0.04f, 0.03f, 0.04f, 1f);
+            f.circle(icx, icy, 56, 40);
+            // bolinhas de nível
+            int max = u.nivelMaximo();
+            if (!cruel) {
+                int atual = u.nivelAtual(partida);
+                int depois = u.nivelDepois(partida);
+                float passo = 26;
+                float bx = icx - (max - 1) * passo / 2;
+                for (int k = 0; k < max; k++) {
+                    float cx = bx + k * passo;
+                    float cy = r.y + 128;
+                    f.setColor(0, 0, 0, 0.8f);
+                    f.circle(cx, cy, 9, 16);
+                    if (k < atual) {
+                        f.setColor(cor);
+                        f.circle(cx, cy, 7, 16);
+                    } else if (k < depois) {
+                        float piscar = 0.55f + 0.45f * MathUtils.sin(tempoEscolha * 8f);
+                        f.setColor(1f, 1f, 1f, piscar);
+                        f.circle(cx, cy, 7, 16);
+                    }
+                }
             }
-            Ui.painel(f, r.x, r.y, r.width, r.height, cor);
-            f.setColor(cor.r, cor.g, cor.b, 0.18f);
-            f.circle(r.x + r.width / 2, r.y + r.height - 70, 34, 24);
         }
     }
 
-    /** Cor da raridade (cinza, azul, roxo, dourado). */
+    /** Cor da raridade (cinza, azul, roxo, dourado) ou vermelho-sangue na carta cruel. */
     static Color corDaRaridade(Raridade r) {
         return switch (r) {
-            case COMUM -> new Color(0.75f, 0.72f, 0.7f, 1f);
-            case RARO -> new Color(0.3f, 0.65f, 1f, 1f);
-            case EPICO -> new Color(0.78f, 0.4f, 1f, 1f);
-            case LENDARIO -> new Color(1f, 0.78f, 0.15f, 1f);
+            case COMUM -> new Color(0.62f, 0.6f, 0.6f, 1f);
+            case RARO -> new Color(0.25f, 0.6f, 1f, 1f);
+            case EPICO -> new Color(0.72f, 0.35f, 1f, 1f);
+            case LENDARIO -> new Color(1f, 0.75f, 0.12f, 1f);
         };
     }
 
     private Color corDoUpgrade(OpcaoUpgrade u) {
-        return corDaRaridade(u.raridade());
+        return u.ehEvolucao() ? new Color(0.95f, 0.15f, 0.12f, 1f) : corDaRaridade(u.raridade());
     }
 
     private void desenharTextoCartoes(SpriteBatch b, Fontes fo, float w, float h) {
-        Ui.texto(b, fo.titulo, "SUBIU DE NÍVEL!", w / 2, h / 2 + 190, Align.center, Color.GOLD);
-        Ui.texto(b, fo.textoPequeno, "Escolha um upgrade  (1, 2, 3 ou clique)", w / 2, h / 2 + 145, Align.center, Ui.CINZA);
+        Ui.texto(b, fo.titulo, "SUBIU DE NÍVEL!", w / 2, h / 2 + 222, Align.center, Color.GOLD);
+        Ui.texto(b, fo.textoPequeno, "Escolha uma carta  (1, 2, 3 ou toque)", w / 2, h / 2 + 182, Align.center, Ui.CINZA);
         List<OpcaoUpgrade> opcoes = partida.opcoesUpgrade();
         for (int i = 0; i < opcoes.size(); i++) {
             Rectangle r = cartoes[i];
             OpcaoUpgrade u = opcoes.get(i);
-            Color cor = corDoUpgrade(u);
-            Ui.texto(b, fo.titulo, String.valueOf(i + 1), r.x + r.width / 2, r.y + r.height - 55, Align.center, cor);
-            Ui.texto(b, fo.subtitulo, u.raridade().toString().toUpperCase() + (u.ehArma() ? "  •  ARMA" : ""),
-                    r.x + r.width / 2, r.y + 138, Align.center, cor);
-            Ui.texto(b, fo.texto, u.titulo(partida), r.x + r.width / 2, r.y + 100, Align.center, Ui.BRANCO_SUAVE);
-            Ui.texto(b, fo.textoPequeno, u.descricao(), r.x + r.width / 2, r.y + 58, Align.center, Ui.CINZA);
+            boolean cruel = u.ehEvolucao();
+            float cx = r.x + r.width / 2;
+            float interno = r.width - 28;
+            String faixa = cruel ? "CARTA CRUEL" : u.raridade().toString().toUpperCase() + (u.ehArma() ? "  •  ARMA" : "");
+            Ui.textoAjustado(b, fo.subtitulo, faixa, cx, r.y + r.height - 18, interno, Align.center, Color.WHITE);
+            Texture icone = jogo.icones().de(u.chave());
+            if (icone != null) {
+                float lado = 96 + (cruel ? 6 * MathUtils.sin(tempoEscolha * 5f) : 0);
+                b.setColor(Color.WHITE);
+                b.draw(icone, cx - lado / 2, r.y + r.height - 118 - lado / 2, lado, lado);
+            }
+            Ui.textoAjustado(b, fo.texto, u.titulo(partida), cx, r.y + 172, interno, Align.center,
+                    cruel ? Color.GOLD : Ui.BRANCO_SUAVE);
+            if (cruel) {
+                Ui.texto(b, fo.textoPequeno, "EVOLUÇÃO", cx, r.y + 136, Align.center, new Color(1f, 0.45f, 0.4f, 1f));
+            } else {
+                int depois = u.nivelDepois(partida);
+                Ui.texto(b, fo.textoPequeno, u.nivelAtual(partida) == 0 ? "NOVA" : "Nível " + depois,
+                        cx, r.y + 152, Align.center, Ui.CINZA);
+            }
+            Ui.textoQuebrado(b, fo.textoPequeno, u.descricao(), r.x + 14, r.y + 104, interno, Align.center, Ui.CINZA);
+            Ui.texto(b, fo.textoPequeno, "[" + (i + 1) + "]", cx, r.y + 28, Align.center, new Color(1, 1, 1, 0.5f));
         }
-    }
-
-    boolean toqueMenuNaPausa() {
-        return ControleToque.telaDeToque() && Ui.mouseSobre(botaoMenuPausa);
     }
 
     /** Índice do cartão clicado/tocado neste quadro, ou -1. */

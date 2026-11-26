@@ -16,6 +16,12 @@ public interface CampoDeBatalha {
 
     float multiplicadorCadencia();
 
+    /** Aumenta raios (orbital, onda, explosões). */
+    float multiplicadorArea();
+
+    /** Empurra um inimigo (ex.: onda evoluída). */
+    void empurrar(Inimigo inimigo, Vetor deslocamento);
+
     Optional<Inimigo> inimigoMaisProximo(float alcance);
 
     List<Inimigo> inimigos();

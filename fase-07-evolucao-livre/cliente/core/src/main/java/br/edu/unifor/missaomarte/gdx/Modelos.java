@@ -55,6 +55,8 @@ public class Modelos implements Disposable {
     public final Model poeira;
     public final Model projetilInimigo;
     public final Model aviso;
+    public final Model missil;
+    public final Model raio;
     private final Texture texturaChao;
 
     private final ModelBuilder mb = new ModelBuilder();
@@ -103,6 +105,10 @@ public class Modelos implements Disposable {
         Material vermelho = emissivo(new Color(1f, 0.1f, 0.1f, 1f));
         vermelho.set(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, 0.45f));
         aviso = mb.createBox(1f, 0.04f, 1f, vermelho, ATRIBUTOS);
+        missil = criarMissil();
+        Material eletrico = emissivo(new Color(0.6f, 0.95f, 1f, 1f));
+        eletrico.set(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, 0.85f));
+        raio = mb.createBox(1f, 1f, 1f, eletrico, ATRIBUTOS);
     }
 
     private Model criarNave() {
@@ -247,6 +253,21 @@ public class Modelos implements Disposable {
         return mb.end();
     }
 
+    private Model criarMissil() {
+        mb.begin();
+        Matrix4 t = new Matrix4();
+        MeshPartBuilder corpo = mb.part("corpo", GL20.GL_TRIANGLES, ATRIBUTOS, difuso(new Color(0.92f, 0.92f, 0.95f, 1f)));
+        corpo.setVertexTransform(t.setToRotation(Vector3.X, 90));
+        corpo.cylinder(0.22f, 0.7f, 0.22f, 8);
+        MeshPartBuilder ponta = mb.part("ponta", GL20.GL_TRIANGLES, ATRIBUTOS, emissivo(new Color(1f, 0.3f, 0.2f, 1f)));
+        ponta.setVertexTransform(t.setToTranslation(0, 0, 0.45f).rotate(Vector3.X, 90));
+        ponta.cone(0.22f, 0.25f, 0.22f, 8);
+        MeshPartBuilder fogo = mb.part("fogo", GL20.GL_TRIANGLES, ATRIBUTOS, emissivo(new Color(1f, 0.65f, 0.15f, 1f)));
+        fogo.setVertexTransform(t.setToTranslation(0, 0, -0.45f).rotate(Vector3.X, -90));
+        fogo.cone(0.18f, 0.3f, 0.18f, 6);
+        return mb.end();
+    }
+
     private Model criarSeta() {
         mb.begin();
         Matrix4 t = new Matrix4();
@@ -282,7 +303,7 @@ public class Modelos implements Disposable {
         for (Model m : new Model[] {nave, perseguidor, rapido, tanque, chefe, projetil, cristal, professor,
                 engenheiro, astronauta, plataforma, plataformaAberta, chao, rocha, cratera, muro, orbital, onda, seta,
                 particula, montanha, feixeProfessor, feixeEngenheiro, feixeAstronauta, feixePlataforma,
-                anelPlataforma, anelPlataformaAberta, poeira, projetilInimigo, aviso}) {
+                anelPlataforma, anelPlataformaAberta, poeira, projetilInimigo, aviso, missil, raio}) {
             m.dispose();
         }
         texturaChao.dispose();

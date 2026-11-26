@@ -30,6 +30,27 @@ por onde vai passar) **→ investir → anel de projéteis → perseguir**. Abai
 mais rápido e com anel duplo (24 + 12). Os projéteis (`ProjetilInimigo`) machucam a nave — a Investida
 passa por eles sem dano, o que cria uma decisão tática.
 
+### 4. Sistema de cartas (níveis, novas cartas e cartas cruéis)
+As opções de nível viraram **cartas** com ícone, moldura da raridade e **marcadores de nível (1 a 5)**.
+
+- **Armas (5 níveis):** Tiro múltiplo, Orbital, Onda de choque, **Mísseis teleguiados** (perseguem e explodem em área),
+  **Raio em cadeia** (salta entre inimigos).
+- **Passivas (5 níveis):** Dano, Cadência, Velocidade, Vida máxima, Ímã, **Armadura** (bloqueia dano), **Área**
+  (raios maiores), **Crítico** (dano dobrado).
+- **Cartas cruéis (evoluções):** arma no nível 5 + a passiva certa → a carta aparece **garantida** entre as opções:
+
+| Arma (nível 5) | + Passiva | Carta cruel |
+|---|---|---|
+| Tiro múltiplo | Cadência | **Tempestade de Plasma** — rajadas de 12 tiros em 360° |
+| Orbital | Área | **Anel de Saturno** — 6 esferas gigantes, giro rápido, dano dobrado |
+| Onda de choque | Armadura | **Terremoto Marciano** — ondas enormes que empurram a horda |
+| Mísseis teleguiados | Crítico | **Chuva de Meteoros** — salvas de 5 mísseis com explosões enormes |
+| Raio em cadeia | Velocidade | **Tempestade Elétrica** — raios a cada 0,6 s saltando por 14 inimigos |
+
+Código: `upgrades/Evolucao` (enum: arma + passiva + regra), `armas/ArmaBase` (nível e evolução comuns),
+`SorteadorUpgrades` (garante a evolução), `PartidaSobrevivencia.nivelPassiva`. Testes: `CartasTest`.
+Ícones das cartas desenhados para o projeto (`assets/icones`).
+
 ## Comportamento anterior preservado
 
 - Regras de vitória/derrota, pontuação, passageiros, ondas e ranking **não mudaram** (o servidor da Fase 5

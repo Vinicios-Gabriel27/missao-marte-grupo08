@@ -5,16 +5,22 @@ import br.edu.unifor.missaomarte.sobrevivencia.armas.Arma;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-/** Ganha a arma (se ainda não tem) ou sobe o nível dela. Épico/Lendário: dois níveis. */
+/** Carta de arma: ganha a arma (nível 1) ou sobe o nível. Épico/Lendário: dois níveis. */
 public class UpgradeArma<T extends Arma> implements Upgrade {
     private final Class<T> tipo;
     private final Supplier<T> fabrica;
     private final String descricao;
+    private final String chave;
 
-    public UpgradeArma(Class<T> tipo, Supplier<T> fabrica, String descricao) {
+    public UpgradeArma(Class<T> tipo, Supplier<T> fabrica, String descricao, String chave) {
         this.tipo = tipo;
         this.fabrica = fabrica;
         this.descricao = descricao;
+        this.chave = chave;
+    }
+
+    public Class<T> tipo() {
+        return tipo;
     }
 
     @Override
@@ -24,15 +30,22 @@ public class UpgradeArma<T extends Arma> implements Upgrade {
 
     @Override
     public String titulo(PartidaSobrevivencia partida, Raridade r) {
-        int sobe = r.niveisDeArma();
-        return partida.arma(tipo)
-                .map(a -> a.nome() + " nv " + Math.min(a.nivelMaximo(), a.nivel() + sobe))
-                .orElse(fabrica.get().nome() + (sobe > 1 ? " nv 2" : " (nova)"));
+        return titulo();
     }
 
     @Override
     public String descricao() {
         return descricao;
+    }
+
+    @Override
+    public String chave() {
+        return chave;
+    }
+
+    @Override
+    public int nivelAtual(PartidaSobrevivencia partida) {
+        return partida.arma(tipo).map(Arma::nivel).orElse(0);
     }
 
     @Override

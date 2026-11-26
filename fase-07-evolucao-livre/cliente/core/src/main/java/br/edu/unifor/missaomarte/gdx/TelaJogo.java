@@ -14,7 +14,9 @@ import br.edu.unifor.missaomarte.sobrevivencia.Projetil;
 import br.edu.unifor.missaomarte.sobrevivencia.ProjetilInimigo;
 import br.edu.unifor.missaomarte.sobrevivencia.TipoInimigo;
 import br.edu.unifor.missaomarte.sobrevivencia.Vetor;
+import br.edu.unifor.missaomarte.sobrevivencia.armas.MisseisTeleguiados;
 import br.edu.unifor.missaomarte.sobrevivencia.armas.OndaDeChoque;
+import br.edu.unifor.missaomarte.sobrevivencia.armas.RaioEmCadeia;
 import br.edu.unifor.missaomarte.sobrevivencia.armas.Orbital;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -58,6 +60,10 @@ public class TelaJogo extends ScreenAdapter {
     private final ModelInstance iAnelAberto;
     private final ModelInstance iProjetilInimigo;
     private final ModelInstance iAviso;
+    private final ModelInstance iMissil;
+    private final ModelInstance iRaio;
+    private final java.util.Set<MisseisTeleguiados.Missil> misseisVistos = java.util.Collections.newSetFromMap(new IdentityHashMap<>());
+    private final Map<MisseisTeleguiados.Missil, Vetor> ultimaPosMissil = new IdentityHashMap<>();
 
     /** Último estado de cada inimigo: x, y, vida, pulso. Detecta acerto e morte. */
     private final Map<Inimigo, float[]> rastroInimigos = new IdentityHashMap<>();
@@ -94,6 +100,8 @@ public class TelaJogo extends ScreenAdapter {
         iAnelAberto = new ModelInstance(m.anelPlataformaAberta);
         iProjetilInimigo = new ModelInstance(m.projetilInimigo);
         iAviso = new ModelInstance(m.aviso);
+        iMissil = new ModelInstance(m.missil);
+        iRaio = new ModelInstance(m.raio);
         mundo.luzPlataforma.color.set(1f, 0.55f, 0.15f, 1f);
         posicionarCamera(1f);
     }
@@ -217,6 +225,14 @@ public class TelaJogo extends ScreenAdapter {
                     tremor = Math.min(1f, tremor + 0.4f);
                 }
                 case CHEFE_ANEL -> s.tocar("explosao", 0.6f);
+                case MISSIL_LANCADO -> s.tocar("missil", 0.35f, 0.2f);
+                case RAIO_DISPARADO -> s.tocar("raio", 0.4f, 0.15f);
+                case EVOLUCAO -> {
+                    s.tocar("evolucao", 1f);
+                    tremor = 1f;
+                    Vetor p = partida.nave().posicao();
+                    particulas.explosao(p.x(), -p.y(), 4, 50, 10f);
+                }
                 default -> { }
             }
             hud.notificar(e);
@@ -280,9 +296,56 @@ public class TelaJogo extends ScreenAdapter {
         }
         Vetor pos = partida.nave().posicao();
         partida.arma(Orbital.class).ifPresent(o -> {
+            float esc = o.raioEsfera() / Orbital.RAIO_ESFERA;
             for (Vetor e : o.posicoes(pos)) {
-                iOrbital.transform.setToTranslation(e.x(), 0.8f, -e.y()).rotate(Vector3.Y, relogio * 200f);
+                iOrbital.transform.setToTranslation(e.x(), 0.8f, -e.y()).rotate(Vector3.Y, relogio * 200f).scale(esc, esc, esc);
                 batch.render(iOrbital, env);
+            }
+        });
+        partida.arma(MisseisTeleguiados.class).ifPresent(mt -> {
+            java.util.Set<MisseisTeleguiados.Missil> agora = java.util.Collections.newSetFromMap(new IdentityHashMap<>());
+            float escala = mt.evoluida() ? 1.8f : 1f;
+            for (MisseisTeleguiados.Missil mi : mt.emVoo()) {
+                agora.add(mi);
+                ultimaPosMissil.put(mi, mi.posicao());
+                iMissil.transform.setToTranslation(mi.posicao().x(), 1.1f, -mi.posicao().y()).rotate(Vector3.Y, angulo(mi.direcao()))
+                        .scale(escala, escala, escala);
+                batch.render(iMissil, env);
+                if (env != null && MathUtils.randomBoolean(0.6f)) {
+                    particulas.rastro(mi.posicao().x() - mi.direcao().x() * 0.5f, 1.1f, -(mi.posicao().y() - mi.direcao().y() * 0.5f));
+                }
+            }
+            if (env != null) {
+                for (MisseisTeleguiados.Missil antigo : misseisVistos) {
+                    if (!agora.contains(antigo)) {
+                        Vetor ex = ultimaPosMissil.remove(antigo);
+                        if (ex != null) {
+                            particulas.explosao(ex.x(), -ex.y(), 4, mt.evoluida() ? 26 : 12, mt.evoluida() ? 11f : 7f);
+                            jogo.sons().tocar("explosao", 0.3f, 0.05f);
+                        }
+                    }
+                }
+                misseisVistos.clear();
+                misseisVistos.addAll(agora);
+            }
+        });
+        partida.arma(RaioEmCadeia.class).ifPresent(r -> {
+            if (r.tempoDesdeDisparo() < 0.18f && r.ultimoCaminho().size() > 1) {
+                java.util.List<Vetor> c = r.ultimoCaminho();
+                float espessura = (r.evoluida() ? 0.22f : 0.14f) * (1f - r.tempoDesdeDisparo() / 0.18f) + 0.04f;
+                for (int k = 0; k + 1 < c.size(); k++) {
+                    Vetor a = c.get(k);
+                    Vetor bb = c.get(k + 1);
+                    // segmento em zigue-zague: dois pedaços com um desvio no meio
+                    Vetor meio = a.mais(bb).vezes(0.5f).mais(new Vetor(MathUtils.random(-0.5f, 0.5f), MathUtils.random(-0.5f, 0.5f)));
+                    for (Vetor[] seg : new Vetor[][] {{a, meio}, {meio, bb}}) {
+                        Vetor d = seg[1].menos(seg[0]);
+                        Vetor m2 = seg[0].mais(d.vezes(0.5f));
+                        iRaio.transform.setToTranslation(m2.x(), 1.0f, -m2.y()).rotate(Vector3.Y, angulo(d))
+                                .scale(espessura, espessura, d.comprimento());
+                        batch.render(iRaio, env);
+                    }
+                }
             }
         });
         partida.arma(OndaDeChoque.class).ifPresent(o -> {

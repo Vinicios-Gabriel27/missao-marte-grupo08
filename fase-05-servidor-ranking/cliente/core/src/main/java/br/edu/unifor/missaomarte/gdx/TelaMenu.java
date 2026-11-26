@@ -435,16 +435,28 @@ public class TelaMenu extends ScreenAdapter {
             Ui.texto(b, fontes.texto, "Nenhuma partida ainda. Seja o primeiro!", w / 2, 380, Align.center, Ui.CINZA);
             return;
         }
+        // colunas com posição fixa: cada valor fica embaixo do seu título
+        float esq = w / 2 - 300;
+        float[] colunas = {w / 2 + 70, w / 2 + 150, w / 2 + 215, w / 2 + 300};
+        String[] titulos = {"PONTOS", "TEMPO", "NÍVEL", "DIFICULDADE"};
         float y = 525;
-        Ui.texto(b, fontes.textoPequeno, "#   PILOTO", w / 2 - 300, y, Align.left, Ui.CINZA);
-        Ui.texto(b, fontes.textoPequeno, "PONTOS     TEMPO    NÍVEL   DIFICULDADE", w / 2 + 300, y, Align.right, Ui.CINZA);
+        Ui.texto(b, fontes.textoPequeno, "#", esq, y, Align.left, Ui.CINZA);
+        Ui.texto(b, fontes.textoPequeno, "PILOTO", esq + 38, y, Align.left, Ui.CINZA);
+        for (int c = 0; c < titulos.length; c++) {
+            Ui.texto(b, fontes.textoPequeno, titulos[c], colunas[c], y, Align.right, Ui.CINZA);
+        }
         for (int i = 0; i < top.size(); i++) {
             RegistroRanking r = top.get(i);
             y -= 34;
             Color cor = i == 0 ? Color.GOLD : i < 3 ? Ui.BRANCO_SUAVE : Ui.CINZA;
-            Ui.texto(b, fontes.texto, (i + 1) + ".  " + r.piloto() + (r.venceu() ? "  [V]" : ""), w / 2 - 300, y, Align.left, cor);
-            Ui.texto(b, fontes.texto, String.format("%6d     %d:%02d     %2d      %s", r.pontuacao(), r.tempoSegundos() / 60,
-                    r.tempoSegundos() % 60, r.nivel(), r.dificuldade()), w / 2 + 300, y, Align.right, cor);
+            Ui.texto(b, fontes.texto, (i + 1) + ".", esq, y, Align.left, cor);
+            Ui.textoAjustado(b, fontes.texto, r.piloto() + (r.venceu() ? "  [V]" : ""), esq + 38, y, 250, Align.left, cor);
+            String[] valores = {String.valueOf(r.pontuacao()),
+                String.format("%d:%02d", r.tempoSegundos() / 60, r.tempoSegundos() % 60),
+                String.valueOf(r.nivel()), r.dificuldade()};
+            for (int c = 0; c < valores.length; c++) {
+                Ui.texto(b, fontes.texto, valores[c], colunas[c], y, Align.right, cor);
+            }
         }
     }
 

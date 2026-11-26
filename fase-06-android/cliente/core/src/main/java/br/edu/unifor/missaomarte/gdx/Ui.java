@@ -57,6 +57,18 @@ final class Ui {
         return LAYOUT.width;
     }
 
+    /** Texto numa linha só; se não couber em {@code largura}, diminui a fonte até caber. */
+    static void textoAjustado(SpriteBatch b, BitmapFont f, String s, float x, float y, float largura,
+                              int alinhamento, Color cor) {
+        float escala = f.getData().scaleX;
+        LAYOUT.setText(f, s);
+        if (LAYOUT.width > largura) {
+            f.getData().setScale(escala * largura / LAYOUT.width);
+        }
+        texto(b, f, s, x, y, alinhamento, cor);
+        f.getData().setScale(escala);
+    }
+
     static float larguraTexto(BitmapFont f, String s) {
         LAYOUT.setText(f, s);
         return LAYOUT.width;

@@ -3,10 +3,14 @@ package br.edu.unifor.missaomarte.sobrevivencia;
 import br.edu.unifor.missaomarte.sobrevivencia.armas.Arma;
 import br.edu.unifor.missaomarte.sobrevivencia.armas.TiroAutomatico;
 import br.edu.unifor.missaomarte.sobrevivencia.upgrades.SorteadorUpgrades;
+import br.edu.unifor.missaomarte.sobrevivencia.upgrades.Evolucao;
 import br.edu.unifor.missaomarte.sobrevivencia.upgrades.OpcaoUpgrade;
+import br.edu.unifor.missaomarte.sobrevivencia.upgrades.UpgradeAtributo;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -53,6 +57,8 @@ public class PartidaSobrevivencia implements CampoDeBatalha {
     private List<OpcaoUpgrade> opcoesUpgrade = List.of();
     private final List<ProjetilInimigo> projeteisInimigos = new ArrayList<>();
     private final PoderEspecial poder = new Investida();
+    private final Map<UpgradeAtributo, Integer> niveisPassivas = new EnumMap<>(UpgradeAtributo.class);
+    private final List<Evolucao> evolucoes = new ArrayList<>();
 
     public PartidaSobrevivencia(Dificuldade dificuldade, Random random) {
         this(dificuldade, Arena.PADRAO, random, GeradorOndas.padrao(random, dificuldade.multiplicadorInimigos()),
@@ -356,6 +362,10 @@ public class PartidaSobrevivencia implements CampoDeBatalha {
 
     @Override
     public void causarDano(Inimigo inimigo, float dano) {
+        if (nave.atributos().chanceCritico() > 0 && random.nextFloat() < nave.atributos().chanceCritico()) {
+            dano *= 2f;
+            registrar(Evento.CRITICO);
+        }
         inimigo.sofrerDano(dano);
         registrar(Evento.INIMIGO_ATINGIDO);
     }
@@ -367,6 +377,33 @@ public class PartidaSobrevivencia implements CampoDeBatalha {
                 causarDano(i, dano);
             }
         }
+    }
+
+    @Override
+    public float multiplicadorArea() {
+        return nave.atributos().multiplicadorArea();
+    }
+
+    @Override
+    public void empurrar(Inimigo inimigo, Vetor deslocamento) {
+        inimigo.empurrar(deslocamento);
+    }
+
+    public int nivelPassiva(UpgradeAtributo passiva) {
+        return niveisPassivas.getOrDefault(passiva, 0);
+    }
+
+    public void subirPassiva(UpgradeAtributo passiva) {
+        niveisPassivas.merge(passiva, 1, Integer::sum);
+    }
+
+    public void registrarEvolucao(Evolucao e) {
+        evolucoes.add(e);
+        registrar(Evento.EVOLUCAO);
+    }
+
+    public List<Evolucao> evolucoes() {
+        return Collections.unmodifiableList(evolucoes);
     }
 
     @Override

@@ -52,7 +52,7 @@ class EvolucaoLivreTest {
     @Test
     void armaEpicaSobeDoisNiveis() {
         PartidaSobrevivencia p = partida();
-        new OpcaoUpgrade(new UpgradeArma<>(Orbital.class, Orbital::new, ""), Raridade.EPICO).aplicar(p);
+        new OpcaoUpgrade(new UpgradeArma<>(Orbital.class, Orbital::new, "", "orbital"), Raridade.EPICO).aplicar(p);
         assertEquals(2, p.arma(Orbital.class).orElseThrow().nivel());
     }
 

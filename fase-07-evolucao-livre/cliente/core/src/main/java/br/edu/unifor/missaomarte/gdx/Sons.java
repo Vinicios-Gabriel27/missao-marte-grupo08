@@ -15,7 +15,7 @@ import com.badlogic.gdx.utils.ObjectMap;
  */
 class Sons implements Disposable {
     private static final String[] NOMES = {"tiro", "explosao", "explosao_grande", "xp", "nivel", "dano", "resgate",
-        "plataforma", "chefe", "clique", "vitoria", "derrota", "investida", "alerta"};
+        "plataforma", "chefe", "clique", "vitoria", "derrota", "investida", "alerta", "raio", "missil", "evolucao"};
 
     private final ObjectMap<String, Sound> sons = new ObjectMap<>();
     private final ObjectFloatMap<String> ultimoToque = new ObjectFloatMap<>();

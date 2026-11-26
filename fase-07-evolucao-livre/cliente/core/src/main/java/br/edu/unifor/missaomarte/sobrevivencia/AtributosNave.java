@@ -12,6 +12,9 @@ public class AtributosNave {
     private float alcanceIma = 3f;
     private float multiplicadorXp = 1f;
     private float regeneracaoPorSegundo = 0f;
+    private float multiplicadorArea = 1f;
+    private float armadura = 0f;
+    private float chanceCritico = 0f;
 
     public AtributosNave(float vidaMaxima) {
         this.vidaMaxima = vidaMaxima;
@@ -43,6 +46,31 @@ public class AtributosNave {
 
     public void aumentarRegeneracao(float porSegundo) {
         regeneracaoPorSegundo += porSegundo;
+    }
+
+    public void aumentarArea(float fracao) {
+        multiplicadorArea += fracao;
+    }
+
+    /** Fração do dano recebido que é bloqueada (máximo 60%). */
+    public void aumentarArmadura(float fracao) {
+        armadura = Math.min(0.6f, armadura + fracao);
+    }
+
+    public void aumentarCritico(float fracao) {
+        chanceCritico = Math.min(0.75f, chanceCritico + fracao);
+    }
+
+    public float multiplicadorArea() {
+        return multiplicadorArea;
+    }
+
+    public float armadura() {
+        return armadura;
+    }
+
+    public float chanceCritico() {
+        return chanceCritico;
     }
 
     public float multiplicadorDano() {
