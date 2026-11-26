@@ -1,6 +1,6 @@
 # Relatório Técnico — Projeto Integrador: Evolução do Missão Marte Unifor
 
-**Disciplina:** T200 — Projeto de Arquitetura de Sistemas · **Equipe:** Grupo08-2026 · **Entrega:** 03/12/2026
+**Disciplina:** T200 — Projeto de Arquitetura de Sistemas · **Equipe:** Grupo08-2026 — Vinicios Gabriel, José Matheus e Marcelo Fong · **Entrega:** 03/12/2026
 **Repositório:** https://github.com/Vinicios-Gabriel27/missao-marte-grupo08
 
 ## 1. Visão geral
@@ -98,9 +98,9 @@ conectado ao servidor e salva capturas de tela, e **gera o APK Android** (public
 
 | Integrante | Contribuições |
 |---|---|
-| Vinicius Gabriel (@Vinicios-Gabriel27) | Design do jogo (gênero, passageiros com bônus, upgrades), integração, testes no desktop, apresentação |
-| _(preencher)_ | |
-| _(preencher)_ | |
+| Vinicios Gabriel (@Vinicios-Gabriel27) | Design do jogo (gênero, passageiros com bônus, upgrades), integração, testes no desktop, apresentação |
+| José Matheus | _(descrever: ex.: testes do jogo, revisão das issues, validação no Android, apresentação)_ |
+| Marcelo Fong | _(descrever: ex.: testes do servidor/API, revisão do relatório, apresentação)_ |
 
 Ferramentas: o desenvolvimento contou com apoio de IA (Claude) para geração e revisão de código, registrado como
 coautor nos commits. Recursos de terceiros: modelos Kenney (CC0), fontes Orbitron e Rajdhani (OFL); sons e música

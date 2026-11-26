@@ -2,7 +2,7 @@
 
 Evolução do jogo **Missão Marte Unifor**: de uma aplicação Java de console até um jogo gráfico multiplataforma (libGDX desktop + Android) com servidor de ranking (Spring Boot).
 
-**Equipe:** Grupo08-2026 — _preencher nomes e usuários GitHub_
+**Equipe:** Grupo08-2026 — Vinicios Gabriel ([@Vinicios-Gabriel27](https://github.com/Vinicios-Gabriel27)), José Matheus e Marcelo Fong
 **Quadro Kanban:** _link do GitHub Project_
 
 ## Fases
