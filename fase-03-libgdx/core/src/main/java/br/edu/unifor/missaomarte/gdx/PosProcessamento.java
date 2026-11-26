@@ -62,7 +62,7 @@ class PosProcessamento implements Disposable {
             + "  vec3 c = cena + brilho * u_intensidade;\n"
             + "  c = (c - 0.5) * 1.1 + 0.5;\n"                             // contraste
             + "  float cinza = dot(c, vec3(0.299, 0.587, 0.114));\n"
-            + "  c = mix(vec3(cinza), c, 1.18);\n"                          // saturação
+            + "  c = mix(vec3(cinza), c, 1.1);\n"                          // saturação
             + "  c *= vec3(1.04, 1.0, 0.95);\n"                             // tom quente
             + "  vec2 d = v_uv - 0.5;\n"
             + "  c *= 1.0 - dot(d, d) * 0.75;\n"                            // vinheta
@@ -109,7 +109,7 @@ class PosProcessamento implements Disposable {
 
     void terminar() {
         cena.end();
-        passar(cena, brilhoA, claridade, () -> claridade.setUniformf("u_limiar", 0.72f));
+        passar(cena, brilhoA, claridade, () -> claridade.setUniformf("u_limiar", 0.88f));
         for (int i = 0; i < 2; i++) {
             passar(brilhoA, brilhoB, desfoque, () -> desfoque.setUniformf("u_passo", 1f / brilhoA.getWidth(), 0f));
             passar(brilhoB, brilhoA, desfoque, () -> desfoque.setUniformf("u_passo", 0f, 1f / brilhoA.getHeight()));
@@ -120,7 +120,7 @@ class PosProcessamento implements Disposable {
         desenhar(cena.getColorBufferTexture(), composicao, Gdx.graphics.getBackBufferWidth(),
                 Gdx.graphics.getBackBufferHeight(), () -> {
                     composicao.setUniformi("u_bloom", 1);
-                    composicao.setUniformf("u_intensidade", 1.15f);
+                    composicao.setUniformf("u_intensidade", 1.0f);
                 });
     }
 

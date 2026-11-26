@@ -16,8 +16,8 @@ final class TexturaMarte {
         float[][] ruido = ruidoSuave(n, r);
         Pixmap p = new Pixmap(n, n, Pixmap.Format.RGBA8888);
         Color base = new Color(0.66f, 0.31f, 0.18f, 1f);
-        Color escuro = new Color(0.36f, 0.14f, 0.08f, 1f);
-        Color claro = new Color(0.86f, 0.52f, 0.33f, 1f);
+        Color escuro = new Color(0.5f, 0.22f, 0.13f, 1f);
+        Color claro = new Color(0.78f, 0.43f, 0.27f, 1f);
         Color c = new Color();
         for (int x = 0; x < n; x++) {
             for (int y = 0; y < n; y++) {

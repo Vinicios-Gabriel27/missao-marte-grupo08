@@ -72,14 +72,15 @@ public class Modelos implements Disposable {
         plataformaAberta = criarPlataforma(true);
         texturaChao = TexturaMarte.criar(7L);
         PBRTextureAttribute areia = PBRTextureAttribute.createBaseColorTexture(texturaChao);
-        areia.scaleU = 30f;
-        areia.scaleV = 30f;
+        areia.scaleU = 22f;
+        areia.scaleV = 22f;
         chao = mb.createRect(-0.5f, 0f, 0.5f, 0.5f, 0f, 0.5f, 0.5f, 0f, -0.5f, -0.5f, 0f, -0.5f, 0f, 1f, 0f,
-                new Material(areia, PBRFloatAttribute.createRoughness(1f), PBRFloatAttribute.createMetallic(0f)),
+                new Material(areia, PBRColorAttribute.createBaseColorFactor(new Color(0.42f, 0.36f, 0.34f, 1f)),
+                        PBRFloatAttribute.createRoughness(1f), PBRFloatAttribute.createMetallic(0f)),
                 ATRIBUTOS | Usage.TextureCoordinates);
         rocha = mb.createSphere(1f, 1f, 1f, 5, 3, difuso(new Color(0.42f, 0.2f, 0.13f, 1f)), ATRIBUTOS);
         cratera = mb.createCylinder(1f, 0.05f, 1f, 10, difuso(new Color(0.48f, 0.2f, 0.12f, 1f)), ATRIBUTOS);
-        muro = mb.createBox(1f, 1f, 1f, pbr(new Color(0.36f, 0.17f, 0.11f, 1f)), ATRIBUTOS);
+        muro = mb.createBox(1f, 1f, 1f, pbr(new Color(0.26f, 0.12f, 0.08f, 1f)), ATRIBUTOS);
         orbital = mb.createSphere(0.9f, 0.9f, 0.9f, 8, 6, emissivo(new Color(0.75f, 0.4f, 1f, 1f)), ATRIBUTOS);
         Material anel = emissivo(new Color(0.4f, 0.8f, 1f, 1f));
         anel.set(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, 0.5f));
@@ -94,7 +95,7 @@ public class Modelos implements Disposable {
         verde.set(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, 0.35f));
         anelPlataformaAberta = mb.createCylinder(3.2f, 0.05f, 3.2f, 24, verde, ATRIBUTOS);
         particula = mb.createBox(1f, 1f, 1f, emissivo(Color.WHITE), ATRIBUTOS);
-        montanha = mb.createCone(1f, 1f, 1f, 7, pbr(new Color(0.55f, 0.25f, 0.15f, 1f)), ATRIBUTOS);
+        montanha = mb.createCone(1f, 1f, 1f, 7, pbr(new Color(0.4f, 0.18f, 0.11f, 1f)), ATRIBUTOS);
         poeira = mb.createBox(1f, 1f, 1f, poeiraMaterial(), ATRIBUTOS);
     }
 

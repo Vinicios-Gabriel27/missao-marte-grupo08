@@ -123,7 +123,7 @@ public class TelaJogo extends ScreenAdapter {
         sol = new DirectionalShadowLight(2048, 2048, 48f, 48f, 1f, 120f);
         sol.direction.set(-0.45f, -1f, -0.35f).nor();
         sol.baseColor.set(1f, 0.88f, 0.75f, 1f);
-        sol.intensity = 3.6f;
+        sol.intensity = 2.6f;
         sol.updateColor();
 
         // Luz de ambiente (IBL) com céu e chão em tons de Marte
@@ -301,18 +301,18 @@ public class TelaJogo extends ScreenAdapter {
         Vetor p = partida.nave().posicao();
         Vetor d = partida.nave().direcao();
         luzMotor.position.set(p.x() - d.x() * 1.4f, 1.1f, -(p.y() - d.y() * 1.4f));
-        luzMotor.intensity = 14f + MathUtils.sin(relogio * 30f) * 3f;
+        luzMotor.intensity = 9f + MathUtils.sin(relogio * 30f) * 2f;
         luzOrbital.intensity = 0f;
         partida.arma(Orbital.class).ifPresent(o -> {
             Vetor e = o.posicoes(p).get(0);
             luzOrbital.position.set(e.x(), 1f, -e.y());
-            luzOrbital.intensity = 10f;
+            luzOrbital.intensity = 7f;
         });
         if (partida.plataformaAberta()) {
             luzPlataforma.color.set(0.2f, 1f, 0.35f, 1f);
             luzPlataforma.intensity = 30f + MathUtils.sin(relogio * 5f) * 8f;
         } else {
-            luzPlataforma.intensity = 10f;
+            luzPlataforma.intensity = 6f;
         }
     }
 
