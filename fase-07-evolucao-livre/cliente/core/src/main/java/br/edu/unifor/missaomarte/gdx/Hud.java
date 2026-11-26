@@ -403,6 +403,10 @@ class Hud {
         }
     }
 
+    boolean toqueMenuNaPausa() {
+        return ControleToque.telaDeToque() && Ui.mouseSobre(botaoMenuPausa);
+    }
+
     /** Índice do cartão clicado/tocado neste quadro, ou -1. */
     int cartaoClicado() {
         if (!Gdx.input.justTouched()) {
