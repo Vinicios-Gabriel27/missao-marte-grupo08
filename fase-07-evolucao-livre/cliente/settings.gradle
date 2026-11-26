@@ -1,0 +1,27 @@
+// Plugins: o do Android vem do repositório do Google.
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+rootProject.name = 'missao-marte-evolucao'
+
+include 'core'
+include 'lwjgl3'
+
+// O módulo android só entra se houver Android SDK (local.properties com sdk.dir ou ANDROID_HOME).
+// Quem só quer rodar no desktop não precisa instalar o SDK.
+def local = new Properties()
+def arquivo = new File(rootDir, 'local.properties')
+if (arquivo.exists()) {
+    arquivo.withInputStream { local.load(it) }
+}
+def sdk = local.getProperty('sdk.dir') ?: System.getenv('ANDROID_HOME') ?: System.getenv('ANDROID_SDK_ROOT')
+if (sdk != null && new File(sdk).isDirectory()) {
+    include 'android'
+} else {
+    println 'Android SDK não encontrado: módulo android ignorado (o desktop funciona normalmente).'
+}
