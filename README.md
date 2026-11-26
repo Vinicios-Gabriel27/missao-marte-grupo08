@@ -25,13 +25,16 @@ Cada fase é uma cópia de trabalho independente; fases anteriores não são alt
 - JDK 17 ou superior (`java -version`)
 - Gradle não precisa estar instalado: use o wrapper (`gradlew` / `gradlew.bat`) de cada fase
 
-## Execução rápida
+## Execução rápida (versão final)
 
 ```bash
-cd fase-02-gradle
-./gradlew test
-./gradlew run --console=plain
+# servidor (opcional)
+cd fase-07-evolucao-livre/servidor && ./gradlew bootRun
+# jogo
+cd fase-07-evolucao-livre/cliente && ./gradlew :lwjgl3:run
 ```
+
+No Windows use `.\gradlew.bat` no lugar de `./gradlew`.
 
 Instruções específicas no README de cada fase.
 
@@ -39,6 +42,9 @@ Instruções específicas no README de cada fase.
 
 - [Arquitetura e decisões — Sprint 1](docs/arquitetura-sprint1.md)
 - [Design do jogo (modo sobrevivência)](docs/design-jogo.md)
+- [Relatório técnico](docs/relatorio-tecnico.md)
+- [Roteiro da apresentação e respostas](docs/roteiro-apresentacao.md)
+- **APK Android:** página *Releases* do repositório
 
 ## Segurança
 
