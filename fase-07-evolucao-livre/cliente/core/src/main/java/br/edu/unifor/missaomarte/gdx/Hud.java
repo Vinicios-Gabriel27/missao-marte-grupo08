@@ -327,11 +327,11 @@ class Hud {
             // faixa do topo (raridade) e moldura do ícone
             Ui.retanguloArredondado(f, r.x + 6, r.y + r.height - 44, r.width - 12, 38, 12, new Color(cor.r, cor.g, cor.b, 0.85f));
             float icx = r.x + r.width / 2;
-            float icy = r.y + r.height - 118;
+            float icy = r.y + 244;
             f.setColor(cor.r * 0.35f, cor.g * 0.35f, cor.b * 0.35f, 1f);
-            f.circle(icx, icy, 62, 40);
+            f.circle(icx, icy, 50, 40);
             f.setColor(0.04f, 0.03f, 0.04f, 1f);
-            f.circle(icx, icy, 56, 40);
+            f.circle(icx, icy, 45, 40);
             // bolinhas de nível
             int max = u.nivelMaximo();
             if (!cruel) {
@@ -341,7 +341,7 @@ class Hud {
                 float bx = icx - (max - 1) * passo / 2;
                 for (int k = 0; k < max; k++) {
                     float cx = bx + k * passo;
-                    float cy = r.y + 128;
+                    float cy = r.y + 124;
                     f.setColor(0, 0, 0, 0.8f);
                     f.circle(cx, cy, 9, 16);
                     if (k < atual) {
@@ -385,18 +385,18 @@ class Hud {
             Ui.textoAjustado(b, fo.subtitulo, faixa, cx, r.y + r.height - 18, interno, Align.center, Color.WHITE);
             Texture icone = jogo.icones().de(u.chave());
             if (icone != null) {
-                float lado = 96 + (cruel ? 6 * MathUtils.sin(tempoEscolha * 5f) : 0);
+                float lado = 80 + (cruel ? 6 * MathUtils.sin(tempoEscolha * 5f) : 0);
                 b.setColor(Color.WHITE);
-                b.draw(icone, cx - lado / 2, r.y + r.height - 118 - lado / 2, lado, lado);
+                b.draw(icone, cx - lado / 2, r.y + 244 - lado / 2, lado, lado);
             }
-            Ui.textoAjustado(b, fo.texto, u.titulo(partida), cx, r.y + 172, interno, Align.center,
+            Ui.textoAjustado(b, fo.texto, u.titulo(partida), cx, r.y + 186, interno, Align.center,
                     cruel ? Color.GOLD : Ui.BRANCO_SUAVE);
             if (cruel) {
-                Ui.texto(b, fo.textoPequeno, "EVOLUÇÃO", cx, r.y + 136, Align.center, new Color(1f, 0.45f, 0.4f, 1f));
+                Ui.texto(b, fo.textoPequeno, "EVOLUÇÃO", cx, r.y + 156, Align.center, new Color(1f, 0.45f, 0.4f, 1f));
             } else {
                 int depois = u.nivelDepois(partida);
                 Ui.texto(b, fo.textoPequeno, u.nivelAtual(partida) == 0 ? "NOVA" : "Nível " + depois,
-                        cx, r.y + 152, Align.center, Ui.CINZA);
+                        cx, r.y + 156, Align.center, Ui.CINZA);
             }
             Ui.textoQuebrado(b, fo.textoPequeno, u.descricao(), r.x + 14, r.y + 104, interno, Align.center, Ui.CINZA);
             Ui.texto(b, fo.textoPequeno, "[" + (i + 1) + "]", cx, r.y + 28, Align.center, new Color(1, 1, 1, 0.5f));
