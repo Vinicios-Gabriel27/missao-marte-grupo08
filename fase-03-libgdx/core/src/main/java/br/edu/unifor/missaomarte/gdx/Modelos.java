@@ -69,8 +69,8 @@ public class Modelos implements Disposable {
         plataformaAberta = criarPlataforma(true);
         texturaChao = TexturaMarte.criar(7L);
         TextureAttribute areia = TextureAttribute.createDiffuse(texturaChao);
-        areia.scaleU = 14f;
-        areia.scaleV = 14f;
+        areia.scaleU = 36f;
+        areia.scaleV = 36f;
         chao = mb.createRect(-0.5f, 0f, 0.5f, 0.5f, 0f, 0.5f, 0.5f, 0f, -0.5f, -0.5f, 0f, -0.5f, 0f, 1f, 0f,
                 new Material(areia), ATRIBUTOS | Usage.TextureCoordinates);
         rocha = mb.createSphere(1f, 1f, 1f, 5, 3, difuso(new Color(0.42f, 0.2f, 0.13f, 1f)), ATRIBUTOS);

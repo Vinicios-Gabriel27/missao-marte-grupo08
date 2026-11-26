@@ -16,8 +16,8 @@ final class TexturaMarte {
         float[][] ruido = ruidoSuave(n, r);
         Pixmap p = new Pixmap(n, n, Pixmap.Format.RGBA8888);
         Color base = new Color(0.66f, 0.31f, 0.18f, 1f);
-        Color escuro = new Color(0.45f, 0.19f, 0.11f, 1f);
-        Color claro = new Color(0.8f, 0.45f, 0.28f, 1f);
+        Color escuro = new Color(0.36f, 0.14f, 0.08f, 1f);
+        Color claro = new Color(0.86f, 0.52f, 0.33f, 1f);
         Color c = new Color();
         for (int x = 0; x < n; x++) {
             for (int y = 0; y < n; y++) {
@@ -27,14 +27,14 @@ final class TexturaMarte {
                 } else {
                     c.set(base).lerp(claro, (v - 0.5f) * 2f);
                 }
-                float grao = (r.nextFloat() - 0.5f) * 0.06f;
+                float grao = (r.nextFloat() - 0.5f) * 0.1f;
                 c.add(grao, grao, grao, 0).clamp();
                 p.setColor(c);
                 p.drawPixel(x, y);
             }
         }
         // pedrinhas
-        for (int i = 0; i < 260; i++) {
+        for (int i = 0; i < 500; i++) {
             float t = r.nextFloat();
             p.setColor(t < 0.5f ? new Color(0.35f, 0.15f, 0.09f, 1f) : new Color(0.85f, 0.55f, 0.38f, 1f));
             p.fillCircle(r.nextInt(n), r.nextInt(n), 1 + r.nextInt(2));

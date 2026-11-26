@@ -31,23 +31,33 @@ class Cenario {
                     .rotate(Vector3.Y, r.nextFloat() * 360f).scale(d, d * 0.6f, d);
             instanciasPbr.add(c);
         }
-        for (int i = 0; i < 85; i++) {
-            Model rocha = kenney.rochas.get(r.nextInt(kenney.rochas.size));
-            float s = (i < 18 ? 2.5f : 1f) + r.nextFloat() * (i < 18 ? 3f : 1.6f);
+        // Dentro da arena: só pedras pequenas (não escondem inimigos)
+        for (int i = 0; i < 45; i++) {
+            Model rocha = kenney.rochas.get(3 + r.nextInt(2)); // rocks_smallA/B
+            float s = 0.8f + r.nextFloat() * 1.2f;
             ModelInstance pedra = new ModelInstance(rocha);
-            pedra.transform.setToTranslation(sortear(r, m + 14, 5), -0.05f, sortear(r, m + 14, 5))
+            pedra.transform.setToTranslation(sortear(r, m - 1, 4), -0.02f, sortear(r, m - 1, 4))
                     .rotate(Vector3.Y, r.nextFloat() * 360f).scale(s, s, s);
             instanciasPbr.add(pedra);
         }
-        // Base marciana: estruturas perto da plataforma e nos cantos da arena
-        float[][] base = {
-            {-10f, -8f, 1.8f, 40}, {10f, -9f, 2.6f, -30}, {11f, 9f, 2.2f, 200}, {-10f, 10f, 2.5f, 120},
-            {-m + 4, -m + 4, 5f, 45}, {m - 4, m - 4, 5f, 225}, {m - 5, -m + 5, 4f, 135}, {-m + 5, m - 5, 4f, 315},
-        };
-        for (int i = 0; i < base.length; i++) {
+        // Fora da arena: rochas grandes, cristais e a base marciana (cenário de fundo)
+        for (int i = 0; i < 70; i++) {
+            Model rocha = kenney.rochas.get(r.nextInt(kenney.rochas.size));
+            float s = 2.5f + r.nextFloat() * 4f;
+            float ang = r.nextFloat() * MathUtils.PI2;
+            float dist = m + 3f + r.nextFloat() * 14f;
+            ModelInstance pedra = new ModelInstance(rocha);
+            pedra.transform.setToTranslation(foraX(ang, dist, m), -0.05f, foraZ(ang, dist, m))
+                    .rotate(Vector3.Y, r.nextFloat() * 360f).scale(s, s, s);
+            instanciasPbr.add(pedra);
+        }
+        for (int i = 0; i < 14; i++) {
             ModelInstance e = new ModelInstance(kenney.estruturas.get(i % kenney.estruturas.size));
-            e.transform.setToTranslation(base[i][0], 0f, base[i][1]).rotate(Vector3.Y, base[i][3])
-                    .scale(base[i][2], base[i][2], base[i][2]);
+            float ang = i / 14f * MathUtils.PI2 + 0.2f;
+            float dist = m + 5f + r.nextFloat() * 4f;
+            float s = 3f + r.nextFloat() * 2.5f;
+            e.transform.setToTranslation(foraX(ang, dist, m), 0f, foraZ(ang, dist, m))
+                    .rotate(Vector3.Y, r.nextFloat() * 360f).scale(s, s, s);
             instanciasPbr.add(e);
         }
         for (int i = 0; i < 40; i++) {
@@ -73,6 +83,21 @@ class Cenario {
         ModelInstance muro = new ModelInstance(modelos.muro);
         muro.transform.setToTranslation(x, altura / 2, z).scale(largura, altura, profundidade);
         instancias.add(muro);
+    }
+
+    /** Ponto na direção do ângulo, empurrado para fora do quadrado da arena. */
+    private static float foraX(float ang, float dist, float m) {
+        float c = MathUtils.cos(ang);
+        float sn = MathUtils.sin(ang);
+        float k = Math.max(Math.abs(c), Math.abs(sn));
+        return c / k * dist;
+    }
+
+    private static float foraZ(float ang, float dist, float m) {
+        float c = MathUtils.cos(ang);
+        float sn = MathUtils.sin(ang);
+        float k = Math.max(Math.abs(c), Math.abs(sn));
+        return sn / k * dist;
     }
 
     /** Posição aleatória em [-limite, limite], evitando o centro (plataforma). */
