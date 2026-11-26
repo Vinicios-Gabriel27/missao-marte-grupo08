@@ -15,14 +15,36 @@ android {
 
     defaultConfig {
         applicationId = 'br.edu.unifor.missaomarte'
-        minSdk = 26
+        minSdk = 21
         targetSdk = 36
         versionCode = 1
         versionName = '1.0'
     }
 
+    // Chave de teste fixa no repositório: todo APK gerado pelo CI tem a mesma assinatura,
+    // então uma versão nova instala por cima da antiga. (Só para builds de teste.)
+    signingConfigs {
+        debug {
+            storeFile = file('debug.keystore')
+            storePassword = 'android'
+            keyAlias = 'androiddebugkey'
+            keyPassword = 'android'
+            enableV1Signing = true
+            enableV2Signing = true
+        }
+    }
+
+    // Bibliotecas nativas compactadas e extraídas na instalação: o formato mais compatível
+    // com instaladores de fabricantes (Xiaomi, Samsung etc.).
+    packaging {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
+
     buildTypes {
         debug {
+            signingConfig = signingConfigs.debug
             // HTTP sem criptografia só no build de teste (emulador/rede local).
             manifestPlaceholders = [usaHttpSemCriptografia: 'true']
         }
