@@ -1,6 +1,8 @@
 package br.edu.unifor.missaomarte.gdx;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g3d.Material;
@@ -40,6 +42,9 @@ public class Modelos implements Disposable {
     public final Model orbital;
     public final Model onda;
     public final Model seta;
+    public final Model particula;
+    public final Model montanha;
+    private final Texture texturaChao;
 
     private final ModelBuilder mb = new ModelBuilder();
 
@@ -49,14 +54,19 @@ public class Modelos implements Disposable {
         rapido = criarRapido();
         tanque = criarTanque();
         chefe = criarChefe();
-        projetil = mb.createSphere(0.35f, 0.35f, 0.35f, 6, 4, emissivo(new Color(0.4f, 1f, 1f, 1f)), ATRIBUTOS);
+        projetil = mb.createSphere(0.22f, 0.22f, 0.9f, 6, 4, emissivo(new Color(0.4f, 1f, 1f, 1f)), ATRIBUTOS);
         cristal = mb.createSphere(0.45f, 0.7f, 0.45f, 4, 2, emissivo(new Color(0.3f, 1f, 0.45f, 1f)), ATRIBUTOS);
         professor = criarPassageiro(new Color(0.25f, 0.45f, 1f, 1f));
         engenheiro = criarPassageiro(new Color(1f, 0.55f, 0.1f, 1f));
         astronauta = criarPassageiro(new Color(0.95f, 0.95f, 0.95f, 1f));
         plataforma = criarPlataforma(false);
         plataformaAberta = criarPlataforma(true);
-        chao = mb.createBox(1f, 1f, 1f, difuso(new Color(0.62f, 0.27f, 0.16f, 1f)), ATRIBUTOS);
+        texturaChao = TexturaMarte.criar(7L);
+        TextureAttribute areia = TextureAttribute.createDiffuse(texturaChao);
+        areia.scaleU = 14f;
+        areia.scaleV = 14f;
+        chao = mb.createRect(-0.5f, 0f, 0.5f, 0.5f, 0f, 0.5f, 0.5f, 0f, -0.5f, -0.5f, 0f, -0.5f, 0f, 1f, 0f,
+                new Material(areia), ATRIBUTOS | Usage.TextureCoordinates);
         rocha = mb.createSphere(1f, 1f, 1f, 5, 3, difuso(new Color(0.42f, 0.2f, 0.13f, 1f)), ATRIBUTOS);
         cratera = mb.createCylinder(1f, 0.05f, 1f, 10, difuso(new Color(0.48f, 0.2f, 0.12f, 1f)), ATRIBUTOS);
         muro = mb.createBox(1f, 1f, 1f, difuso(new Color(0.3f, 0.14f, 0.1f, 1f)), ATRIBUTOS);
@@ -65,6 +75,8 @@ public class Modelos implements Disposable {
         anel.set(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, 0.5f));
         onda = mb.createCylinder(2f, 0.08f, 2f, 32, anel, ATRIBUTOS);
         seta = criarSeta();
+        particula = mb.createBox(1f, 1f, 1f, emissivo(Color.WHITE), ATRIBUTOS);
+        montanha = mb.createCone(1f, 1f, 1f, 6, difuso(new Color(0.5f, 0.22f, 0.14f, 1f)), ATRIBUTOS);
     }
 
     private Model criarNave() {
@@ -219,8 +231,10 @@ public class Modelos implements Disposable {
     @Override
     public void dispose() {
         for (Model m : new Model[] {nave, perseguidor, rapido, tanque, chefe, projetil, cristal, professor,
-                engenheiro, astronauta, plataforma, plataformaAberta, chao, rocha, cratera, muro, orbital, onda, seta}) {
+                engenheiro, astronauta, plataforma, plataformaAberta, chao, rocha, cratera, muro, orbital, onda, seta,
+                particula, montanha}) {
             m.dispose();
         }
+        texturaChao.dispose();
     }
 }

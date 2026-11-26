@@ -16,7 +16,7 @@ class Cenario {
         Random r = new Random(semente);
 
         ModelInstance chao = new ModelInstance(modelos.chao);
-        chao.transform.setToTranslation(0, -0.5f, 0).scale(2 * m + 30, 1f, 2 * m + 30);
+        chao.transform.setToTranslation(0, 0f, 0).scale(2 * m + 140, 1f, 2 * m + 140);
         instancias.add(chao);
 
         for (int i = 0; i < 26; i++) {
@@ -32,6 +32,16 @@ class Cenario {
                     .rotate(Vector3.Y, r.nextFloat() * 360f)
                     .scale(s * (0.8f + r.nextFloat() * 0.6f), s * 0.6f, s);
             instancias.add(pedra);
+        }
+        for (int i = 0; i < 40; i++) {
+            float ang = i / 40f * MathUtils.PI2 + r.nextFloat() * 0.1f;
+            float dist = m + 18 + r.nextFloat() * 25;
+            float alt = 6 + r.nextFloat() * 14;
+            float larg = 10 + r.nextFloat() * 14;
+            ModelInstance mont = new ModelInstance(modelos.montanha);
+            mont.transform.setToTranslation(MathUtils.cos(ang) * dist, alt / 2 - 0.5f, MathUtils.sin(ang) * dist)
+                    .rotate(Vector3.Y, r.nextFloat() * 360).scale(larg, alt, larg * (0.7f + r.nextFloat() * 0.6f));
+            instancias.add(mont);
         }
         float espessura = 1f;
         float altura = 1.2f;
