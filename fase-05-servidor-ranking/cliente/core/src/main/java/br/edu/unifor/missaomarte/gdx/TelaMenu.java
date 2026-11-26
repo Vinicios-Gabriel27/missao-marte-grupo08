@@ -436,8 +436,8 @@ public class TelaMenu extends ScreenAdapter {
             return;
         }
         // colunas com posição fixa: cada valor fica embaixo do seu título
-        float esq = w / 2 - 300;
-        float[] colunas = {w / 2 + 50, w / 2 + 135, w / 2 + 200, w / 2 + 222};
+        float esq = w / 2 - 305;
+        float[] colunas = {w / 2 + 30, w / 2 + 115, w / 2 + 180, w / 2 + 200};
         int[] alinhar = {Align.right, Align.right, Align.right, Align.left};
         String[] titulos = {"PONTOS", "TEMPO", "NÍVEL", "DIFICULDADE"};
         float y = 525;

@@ -398,8 +398,8 @@ class Hud {
                 Ui.texto(b, fo.textoPequeno, u.nivelAtual(partida) == 0 ? "NOVA" : "Nível " + depois,
                         cx, r.y + 156, Align.center, Ui.CINZA);
             }
-            Ui.textoQuebrado(b, fo.textoPequeno, u.descricao(), r.x + 14, r.y + 104, interno, Align.center, Ui.CINZA);
-            Ui.texto(b, fo.textoPequeno, "[" + (i + 1) + "]", cx, r.y + 28, Align.center, new Color(1, 1, 1, 0.5f));
+            Ui.textoQuebrado(b, fo.textoPequeno, u.descricao(), r.x + 14, r.y + 108, interno, Align.center, Ui.CINZA);
+            Ui.texto(b, fo.textoPequeno, "[" + (i + 1) + "]", cx, r.y + 22, Align.center, new Color(1, 1, 1, 0.5f));
         }
     }
 
