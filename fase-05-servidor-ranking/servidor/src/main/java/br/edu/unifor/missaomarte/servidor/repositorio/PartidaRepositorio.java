@@ -5,6 +5,7 @@ import br.edu.unifor.missaomarte.servidor.dominio.NivelDificuldade;
 import br.edu.unifor.missaomarte.servidor.dominio.PartidaRegistrada;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,6 +16,7 @@ public interface PartidaRepositorio extends JpaRepository<PartidaRegistrada, Lon
             + "order by p.pontuacao desc, p.tempoSegundos asc, p.id asc")
     List<PartidaRegistrada> melhores(@Param("dificuldade") NivelDificuldade dificuldade, Pageable pagina);
 
+    @EntityGraph(attributePaths = "jogador")
     List<PartidaRegistrada> findByJogadorOrderByRegistradaEmDesc(Jogador jogador, Pageable pagina);
 
     long countByJogador(Jogador jogador);

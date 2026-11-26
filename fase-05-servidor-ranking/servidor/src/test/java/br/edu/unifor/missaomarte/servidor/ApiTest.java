@@ -150,7 +150,7 @@ class ApiTest {
         String a = cadastrarELogar("Hugo");
         String b = cadastrarELogar("Iris");
         postar("/api/partidas", partida(300, 100, 10, 0, false), a).andExpect(status().isCreated());
-        postar("/api/partidas", partida(9000, 2000, 400, 3, false), b).andExpect(status().isCreated());
+        postar("/api/partidas", partida(8000, 2000, 400, 3, false), b).andExpect(status().isCreated());
         mvc.perform(get("/api/ranking").param("limite", "50"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].posicao").value(1))
