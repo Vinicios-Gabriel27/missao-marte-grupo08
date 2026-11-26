@@ -1,0 +1,4 @@
+rootProject.name = 'missao-marte-cliente'
+
+include 'core'
+include 'lwjgl3'

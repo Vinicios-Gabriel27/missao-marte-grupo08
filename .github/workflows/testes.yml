@@ -86,8 +86,37 @@ jobs:
           name: relatorio-testes-fase-04-java${{ matrix.java }}
           path: fase-04-interface-grafica/core/build/reports/tests/test
 
+  fase-05-cliente:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        java: ['17', '26']
+    defaults:
+      run:
+        working-directory: fase-05-servidor-ranking/cliente
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java }}
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Testes e build (core + desktop)
+        run: |
+          chmod +x gradlew
+          ./gradlew build --console=plain
+      - name: Relatório de testes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: relatorio-testes-fase-05-cliente-java${{ matrix.java }}
+          path: fase-05-servidor-ranking/cliente/core/build/reports/tests/test
+
   fase-05-servidor:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     strategy:
       fail-fast: false
       matrix:
@@ -105,7 +134,8 @@ jobs:
       - name: Testes e build do servidor
         run: |
           chmod +x gradlew
-          ./gradlew build --console=plain
+          ./gradlew build --console=plain 2>&1 | tee build.log
+          exit ${PIPESTATUS[0]}
       - name: Teste de ponta a ponta (servidor rodando)
         run: |
           java -jar build/libs/missao-marte-servidor-1.0.jar > servidor.log 2>&1 &
@@ -117,16 +147,24 @@ jobs:
         with:
           name: relatorio-testes-servidor-java${{ matrix.java }}
           path: fase-05-servidor-ranking/servidor/build/reports/tests/test
+      - name: Publicar log em caso de falha
+        if: failure()
+        run: |
+          mkdir -p /tmp/log && cp build.log /tmp/log/ 2>/dev/null || true
+          find build/test-results -name '*.xml' -exec cp {} /tmp/log/ \; 2>/dev/null || true
+          cd /tmp/log && git init -q -b log && git config user.name ci && git config user.email ci@users.noreply.github.com
+          git add -A && git commit -qm "log servidor java ${{ matrix.java }}"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" log:log-servidor-${{ matrix.java }}
 
   executar-jogo:
     # Abre o jogo num monitor virtual (Xvfb + Mesa), joga sozinho 45 s e salva capturas de tela.
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    needs: fase-04-interface-grafica
+    needs: [fase-05-cliente, fase-05-servidor]
     defaults:
       run:
-        working-directory: fase-04-interface-grafica
+        working-directory: fase-05-servidor-ranking/cliente
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -136,9 +174,16 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
       - name: Monitor virtual
         run: sudo apt-get update -q && sudo apt-get install -y -q xvfb libgl1-mesa-dri mesa-utils
-      - name: Executar o jogo (modo demonstração)
+      - name: Subir o servidor e semear o ranking
+        run: |
+          cd ../servidor && chmod +x gradlew && ./gradlew bootJar --console=plain -q
+          java -jar build/libs/missao-marte-servidor-1.0.jar > /tmp/servidor.log 2>&1 &
+          for i in $(seq 1 60); do curl -fs http://localhost:8080/actuator/health && break; sleep 1; done
+          ./teste-api.sh http://localhost:8080
+      - name: Executar o jogo (modo demonstração, conectado ao servidor)
         env:
           MISSAOMARTE_DEMO: '1'
+          MISSAOMARTE_SERVIDOR: 'http://localhost:8080'
           LIBGL_ALWAYS_SOFTWARE: '1'
         run: |
           chmod +x gradlew
@@ -150,8 +195,8 @@ jobs:
         with:
           name: execucao-jogo
           path: |
-            fase-04-interface-grafica/execucao.log
-            fase-04-interface-grafica/*.png
+            fase-05-servidor-ranking/cliente/execucao.log
+            fase-05-servidor-ranking/cliente/*.png
       - name: Publicar capturas no branch "capturas"
         if: always()
         run: |
