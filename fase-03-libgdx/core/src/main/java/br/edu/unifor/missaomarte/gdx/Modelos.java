@@ -2,7 +2,6 @@ package br.edu.unifor.missaomarte.gdx;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g3d.Material;
@@ -14,6 +13,9 @@ import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
+import net.mgsx.gltf.scene3d.attributes.PBRColorAttribute;
+import net.mgsx.gltf.scene3d.attributes.PBRFloatAttribute;
+import net.mgsx.gltf.scene3d.attributes.PBRTextureAttribute;
 
 /**
  * Fábrica dos modelos 3D low-poly, montados com formas simples (sem arquivos de modelo).
@@ -50,6 +52,7 @@ public class Modelos implements Disposable {
     public final Model anelPlataforma;
     public final Model anelPlataformaAberta;
     public final Model montanha;
+    public final Model poeira;
     private final Texture texturaChao;
 
     private final ModelBuilder mb = new ModelBuilder();
@@ -68,14 +71,15 @@ public class Modelos implements Disposable {
         plataforma = criarPlataforma(false);
         plataformaAberta = criarPlataforma(true);
         texturaChao = TexturaMarte.criar(7L);
-        TextureAttribute areia = TextureAttribute.createDiffuse(texturaChao);
-        areia.scaleU = 36f;
-        areia.scaleV = 36f;
+        PBRTextureAttribute areia = PBRTextureAttribute.createBaseColorTexture(texturaChao);
+        areia.scaleU = 30f;
+        areia.scaleV = 30f;
         chao = mb.createRect(-0.5f, 0f, 0.5f, 0.5f, 0f, 0.5f, 0.5f, 0f, -0.5f, -0.5f, 0f, -0.5f, 0f, 1f, 0f,
-                new Material(areia), ATRIBUTOS | Usage.TextureCoordinates);
+                new Material(areia, PBRFloatAttribute.createRoughness(1f), PBRFloatAttribute.createMetallic(0f)),
+                ATRIBUTOS | Usage.TextureCoordinates);
         rocha = mb.createSphere(1f, 1f, 1f, 5, 3, difuso(new Color(0.42f, 0.2f, 0.13f, 1f)), ATRIBUTOS);
         cratera = mb.createCylinder(1f, 0.05f, 1f, 10, difuso(new Color(0.48f, 0.2f, 0.12f, 1f)), ATRIBUTOS);
-        muro = mb.createBox(1f, 1f, 1f, difuso(new Color(0.3f, 0.14f, 0.1f, 1f)), ATRIBUTOS);
+        muro = mb.createBox(1f, 1f, 1f, pbr(new Color(0.36f, 0.17f, 0.11f, 1f)), ATRIBUTOS);
         orbital = mb.createSphere(0.9f, 0.9f, 0.9f, 8, 6, emissivo(new Color(0.75f, 0.4f, 1f, 1f)), ATRIBUTOS);
         Material anel = emissivo(new Color(0.4f, 0.8f, 1f, 1f));
         anel.set(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, 0.5f));
@@ -90,7 +94,8 @@ public class Modelos implements Disposable {
         verde.set(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, 0.35f));
         anelPlataformaAberta = mb.createCylinder(3.2f, 0.05f, 3.2f, 24, verde, ATRIBUTOS);
         particula = mb.createBox(1f, 1f, 1f, emissivo(Color.WHITE), ATRIBUTOS);
-        montanha = mb.createCone(1f, 1f, 1f, 6, difuso(new Color(0.5f, 0.22f, 0.14f, 1f)), ATRIBUTOS);
+        montanha = mb.createCone(1f, 1f, 1f, 7, pbr(new Color(0.55f, 0.25f, 0.15f, 1f)), ATRIBUTOS);
+        poeira = mb.createBox(1f, 1f, 1f, poeiraMaterial(), ATRIBUTOS);
     }
 
     private Model criarNave() {
@@ -244,6 +249,18 @@ public class Modelos implements Disposable {
         return mb.end();
     }
 
+    /** Material PBR fosco (rocha/areia). */
+    private static Material pbr(Color cor) {
+        return new Material(PBRColorAttribute.createBaseColorFactor(cor), PBRFloatAttribute.createRoughness(0.95f),
+                PBRFloatAttribute.createMetallic(0f));
+    }
+
+    private static Material poeiraMaterial() {
+        Material m = emissivo(new Color(1f, 0.85f, 0.7f, 1f));
+        m.set(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, 0.35f));
+        return m;
+    }
+
     private static Material difuso(Color cor) {
         return new Material(ColorAttribute.createDiffuse(cor));
     }
@@ -258,7 +275,7 @@ public class Modelos implements Disposable {
         for (Model m : new Model[] {nave, perseguidor, rapido, tanque, chefe, projetil, cristal, professor,
                 engenheiro, astronauta, plataforma, plataformaAberta, chao, rocha, cratera, muro, orbital, onda, seta,
                 particula, montanha, feixeProfessor, feixeEngenheiro, feixeAstronauta, feixePlataforma,
-                anelPlataforma, anelPlataformaAberta}) {
+                anelPlataforma, anelPlataformaAberta, poeira}) {
             m.dispose();
         }
         texturaChao.dispose();

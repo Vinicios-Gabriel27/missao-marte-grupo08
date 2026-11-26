@@ -21,7 +21,7 @@ class Cenario {
 
         ModelInstance chao = new ModelInstance(modelos.chao);
         chao.transform.setToTranslation(0, 0f, 0).scale(2 * m + 140, 1f, 2 * m + 140);
-        instancias.add(chao);
+        instanciasPbr.add(chao);
 
         for (int i = 0; i < 22; i++) {
             Model cratera = kenney.crateras.get(i % kenney.crateras.size);
@@ -68,7 +68,7 @@ class Cenario {
             ModelInstance mont = new ModelInstance(modelos.montanha);
             mont.transform.setToTranslation(MathUtils.cos(ang) * dist, alt / 2 - 0.5f, MathUtils.sin(ang) * dist)
                     .rotate(Vector3.Y, r.nextFloat() * 360).scale(larg, alt, larg * (0.7f + r.nextFloat() * 0.6f));
-            instancias.add(mont);
+            instanciasPbr.add(mont);
         }
         float espessura = 1f;
         float altura = 1.2f;
@@ -82,7 +82,7 @@ class Cenario {
     private void adicionarMuro(Modelos modelos, float x, float z, float largura, float altura, float profundidade) {
         ModelInstance muro = new ModelInstance(modelos.muro);
         muro.transform.setToTranslation(x, altura / 2, z).scale(largura, altura, profundidade);
-        instancias.add(muro);
+        instanciasPbr.add(muro);
     }
 
     /** Ponto na direção do ângulo, empurrado para fora do quadrado da arena. */

@@ -35,9 +35,17 @@ class Particulas {
         }
     };
     private final Array<ModelInstance> porCor = new Array<>();
+    private final ModelInstance iPoeira;
+    private final float[] poeira = new float[3 * 140];
     private final Array<Color> cores = new Array<>();
 
     Particulas(Modelos modelos) {
+        iPoeira = new ModelInstance(modelos.poeira);
+        for (int i = 0; i < poeira.length; i += 3) {
+            poeira[i] = MathUtils.random(-22f, 22f);
+            poeira[i + 1] = MathUtils.random(0.2f, 6f);
+            poeira[i + 2] = MathUtils.random(-22f, 22f);
+        }
         for (Color c : new Color[] {
             new Color(0.95f, 0.2f, 0.2f, 1f),   // 0 perseguidor
             new Color(1f, 0.85f, 0.15f, 1f),    // 1 rápido
@@ -108,6 +116,23 @@ class Particulas {
             }
             p.giro += 400f * delta;
         }
+    }
+
+    /** Grãos de poeira flutuando em volta do centro (seguem a câmera, dando ao ar uma "textura"). */
+    void desenharPoeira(ModelBatch batch, Environment ambiente, float cx, float cz, float tempo) {
+        for (int i = 0; i < poeira.length; i += 3) {
+            float x = cx + envolver(poeira[i] + tempo * 0.9f - cx, 22f);
+            float z = cz + envolver(poeira[i + 2] + tempo * 0.4f - cz, 22f);
+            float y = poeira[i + 1] + MathUtils.sin(tempo * 0.8f + i) * 0.3f;
+            float s = 0.05f + (i % 7) * 0.012f;
+            iPoeira.transform.setToTranslation(x, y, z).scale(s, s, s);
+            batch.render(iPoeira, ambiente);
+        }
+    }
+
+    private static float envolver(float v, float meio) {
+        float t = 2 * meio;
+        return ((v + meio) % t + t) % t - meio;
     }
 
     void desenhar(ModelBatch batch, Environment ambiente) {

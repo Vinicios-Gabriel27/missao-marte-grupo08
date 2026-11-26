@@ -38,6 +38,7 @@ import net.mgsx.gltf.scene3d.attributes.PBRCubemapAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRFloatAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRTextureAttribute;
 import net.mgsx.gltf.scene3d.lights.DirectionalShadowLight;
+import net.mgsx.gltf.scene3d.lights.PointLightEx;
 import net.mgsx.gltf.scene3d.shaders.PBRShaderConfig;
 import net.mgsx.gltf.scene3d.shaders.PBRShaderProvider;
 import net.mgsx.gltf.scene3d.utils.IBLBuilder;
@@ -72,6 +73,10 @@ public class TelaJogo extends ScreenAdapter {
     private final Cenario cenario;
     private final Hud hud;
     private final Particulas particulas;
+    private final PosProcessamento pos = new PosProcessamento();
+    private final PointLightEx luzMotor = new PointLightEx();
+    private final PointLightEx luzOrbital = new PointLightEx();
+    private final PointLightEx luzPlataforma = new PointLightEx();
 
     private final ModelInstance iProjetil;
     private final ModelInstance iCristal;
@@ -110,6 +115,7 @@ public class TelaJogo extends ScreenAdapter {
         PBRShaderConfig config = PBRShaderProvider.createDefaultConfig();
         config.numBones = 16;
         config.numDirectionalLights = 2;
+        config.numPointLights = 3;
         pbrBatch = new ModelBatch(PBRShaderProvider.createDefault(config));
         sombraBatch = new ModelBatch(PBRShaderProvider.createDefaultDepth(16));
 
@@ -132,6 +138,19 @@ public class TelaJogo extends ScreenAdapter {
         brdf = new Texture(Gdx.files.classpath("net/mgsx/gltf/shaders/brdfLUT.png"));
 
         ambientePbr.add(sol);
+        luzMotor.color.set(1f, 0.55f, 0.2f, 1f);
+        luzMotor.intensity = 18f;
+        luzMotor.range = 9f;
+        luzOrbital.color.set(0.75f, 0.4f, 1f, 1f);
+        luzOrbital.intensity = 0f;
+        luzOrbital.range = 7f;
+        luzPlataforma.color.set(1f, 0.55f, 0.15f, 1f);
+        luzPlataforma.intensity = 14f;
+        luzPlataforma.range = 8f;
+        luzPlataforma.position.set(0, 1.5f, 0);
+        ambientePbr.add(luzMotor);
+        ambientePbr.add(luzOrbital);
+        ambientePbr.add(luzPlataforma);
         ambientePbr.shadowMap = sol;
         ambientePbr.set(PBRCubemapAttribute.createDiffuseEnv(mapaDifuso));
         ambientePbr.set(PBRCubemapAttribute.createSpecularEnv(mapaEspecular));
@@ -202,12 +221,11 @@ public class TelaJogo extends ScreenAdapter {
         sombraBatch.end();
         sol.end();
 
-        // 2ª passada: cena com sombras, névoa e luz de ambiente
-        ScreenUtils.clear(CEU, true);
-        classicoBatch.begin(camera);
-        classicoBatch.render(cenario.instancias, ambienteClassico);
-        classicoBatch.end();
+        atualizarLuzes();
 
+        // 2ª passada: cena com sombras, névoa e luz de ambiente (desenhada numa textura)
+        pos.comecar();
+        ScreenUtils.clear(CEU, true);
         pbrBatch.begin(camera);
         pbrBatch.render(cenario.instanciasPbr, ambientePbr);
         desenharPbr(pbrBatch, ambientePbr);
@@ -216,7 +234,9 @@ public class TelaJogo extends ScreenAdapter {
         classicoBatch.begin(camera);
         desenharEfeitos(classicoBatch, ambienteClassico);
         particulas.desenhar(classicoBatch, ambienteClassico);
+        particulas.desenharPoeira(classicoBatch, ambienteClassico, alvoCamera.x, alvoCamera.z, relogio);
         classicoBatch.end();
+        pos.terminar(); // bloom, cor e vinheta
 
         hud.desenhar(pausado);
         if (demo) {
@@ -273,6 +293,26 @@ public class TelaJogo extends ScreenAdapter {
                     break;
                 }
             }
+        }
+    }
+
+    /** Luzes que acompanham a nave, o orbital e a plataforma (iluminam chão e inimigos). */
+    private void atualizarLuzes() {
+        Vetor p = partida.nave().posicao();
+        Vetor d = partida.nave().direcao();
+        luzMotor.position.set(p.x() - d.x() * 1.4f, 1.1f, -(p.y() - d.y() * 1.4f));
+        luzMotor.intensity = 14f + MathUtils.sin(relogio * 30f) * 3f;
+        luzOrbital.intensity = 0f;
+        partida.arma(Orbital.class).ifPresent(o -> {
+            Vetor e = o.posicoes(p).get(0);
+            luzOrbital.position.set(e.x(), 1f, -e.y());
+            luzOrbital.intensity = 10f;
+        });
+        if (partida.plataformaAberta()) {
+            luzPlataforma.color.set(0.2f, 1f, 0.35f, 1f);
+            luzPlataforma.intensity = 30f + MathUtils.sin(relogio * 5f) * 8f;
+        } else {
+            luzPlataforma.intensity = 10f;
         }
     }
 
@@ -427,6 +467,7 @@ public class TelaJogo extends ScreenAdapter {
 
     @Override
     public void resize(int width, int height) {
+        pos.redimensionar(Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight());
         camera.viewportWidth = width;
         camera.viewportHeight = height;
         camera.update();
@@ -439,6 +480,7 @@ public class TelaJogo extends ScreenAdapter {
 
     @Override
     public void dispose() {
+        pos.dispose();
         pbrBatch.dispose();
         classicoBatch.dispose();
         sombraBatch.dispose();
