@@ -96,6 +96,8 @@ public class TelaJogo extends ScreenAdapter {
     private float tempoRastroMotor;
     private boolean pausado;
     private boolean naveAndando;
+    private final boolean demo = MissaoMarteJogo.modoDemonstracao();
+    private int capturas;
 
     public TelaJogo(MissaoMarteJogo jogo, Dificuldade dificuldade) {
         this.jogo = jogo;
@@ -170,7 +172,7 @@ public class TelaJogo extends ScreenAdapter {
         relogio += delta;
         lerEntradaGeral();
         if (!pausado) {
-            Vetor entrada = ControleTeclado.direcao();
+            Vetor entrada = demo ? pilotoAutomatico() : ControleTeclado.direcao();
             naveAndando = entrada.comprimento() > 0.01f;
             List<Evento> eventos = partida.atualizar(delta, entrada);
             reagir(eventos);
@@ -217,6 +219,42 @@ public class TelaJogo extends ScreenAdapter {
         classicoBatch.end();
 
         hud.desenhar(pausado);
+        if (demo) {
+            capturarDemonstracao();
+        }
+    }
+
+    /** Piloto automático do modo demonstração: busca passageiros e desvia dos inimigos. */
+    private Vetor pilotoAutomatico() {
+        if (partida.estado() == EstadoPartida.ESCOLHENDO_UPGRADE) {
+            partida.escolherUpgrade(0);
+        }
+        Vetor pos = partida.nave().posicao();
+        Vetor alvo = partida.passageiroMaisProximo().map(Passageiro::posicao)
+                .orElse(Vetor.polar(relogio * 0.5f, 8f));
+        Vetor dir = alvo.menos(pos).normalizado();
+        for (Inimigo i : partida.inimigos()) {
+            float d = i.posicao().distancia(pos);
+            if (d < 4f) {
+                dir = dir.mais(pos.menos(i.posicao()).normalizado().vezes((4f - d) / 2f));
+            }
+        }
+        return dir;
+    }
+
+    private void capturarDemonstracao() {
+        float[] instantes = {4f, 15f, 30f, 45f};
+        if (capturas < instantes.length && relogio >= instantes[capturas]) {
+            com.badlogic.gdx.graphics.Pixmap p = com.badlogic.gdx.utils.ScreenUtils.getFrameBufferPixmap(
+                    0, 0, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight());
+            com.badlogic.gdx.graphics.PixmapIO.writePNG(Gdx.files.local("captura-" + capturas + ".png"), p, 6, true);
+            p.dispose();
+            Gdx.app.log("DEMO", "captura " + capturas + " salva");
+            capturas++;
+        }
+        if (relogio > 47f) {
+            Gdx.app.exit();
+        }
     }
 
     private void lerEntradaGeral() {

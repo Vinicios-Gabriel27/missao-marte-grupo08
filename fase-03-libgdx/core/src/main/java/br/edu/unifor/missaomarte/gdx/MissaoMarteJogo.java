@@ -23,7 +23,11 @@ public class MissaoMarteJogo extends Game {
         fonte = new BitmapFont();
         fonte.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         fonte.setUseIntegerPositions(false);
-        setScreen(new TelaMenu(this));
+        if (modoDemonstracao()) {
+            setScreen(new TelaJogo(this, br.edu.unifor.missaomarte.sobrevivencia.Dificuldade.MEDIO));
+        } else {
+            setScreen(new TelaMenu(this));
+        }
     }
 
     /** Troca a tela e libera a anterior. */
@@ -33,6 +37,11 @@ public class MissaoMarteJogo extends Game {
         if (antiga != null) {
             antiga.dispose();
         }
+    }
+
+    /** MISSAOMARTE_DEMO=1: entra direto na partida com piloto automático e salva capturas (usado no CI). */
+    static boolean modoDemonstracao() {
+        return "1".equals(System.getenv("MISSAOMARTE_DEMO"));
     }
 
     public SpriteBatch batch() {
