@@ -1,0 +1,23 @@
+# Gradle / build
+.gradle/
+build/
+out/
+bin/
+*.class
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# Dados locais do jogo (não versionar rankings de teste)
+ranking.txt
+ranking*.json
+
+# Segredos — nunca versionar
+.env
+*.env
+local.properties
