@@ -88,7 +88,7 @@ conectado ao servidor e salva capturas de tela, e **gera o APK Android** (public
 - **Til da fonte Orbitron** parecia crase → glifo redesenhado na fonte (licença OFL permite).
 - **Servidor não valida a jogabilidade:** recusa só o impossível (teto da fórmula `abates×10 + s×2 + passageiros×100 + 500`,
   vitória sem 5 passageiros, limites). Melhoria: replays verificáveis ou simulação no servidor.
-- **Android:** verificado por compilação/APK no CI; desempenho real depende do aparelho (PBR + sombras + bloom).
+- **Android:** APK gerado pelo CI (Android 5.0+) e instalado em celular real; desempenho real depende do aparelho (PBR + sombras + bloom).
   Melhoria: opção de qualidade gráfica.
 - **Publicação em nuvem:** servidor preparado (porta, pasta de dados, segredo e endereço por variáveis de ambiente,
   `/actuator/health`), sem publicação real (não exigida). Em produção: banco gerenciado, Flyway e HTTPS.
@@ -98,9 +98,9 @@ conectado ao servidor e salva capturas de tela, e **gera o APK Android** (public
 
 | Integrante | Contribuições |
 |---|---|
-| Vinicios Gabriel (@Vinicios-Gabriel27) | Design do jogo (gênero, passageiros com bônus, upgrades), integração, testes no desktop, apresentação |
-| José Matheus | _(descrever: ex.: testes do jogo, revisão das issues, validação no Android, apresentação)_ |
-| Marcelo Fong | _(descrever: ex.: testes do servidor/API, revisão do relatório, apresentação)_ |
+| Vinicios Gabriel (@Vinicios-Gabriel27) | Design do jogo (gênero, passageiros com bônus, cartas), desenvolvimento das fases, servidor, Android, integração contínua e apresentação |
+| José Matheus | Validação do código: revisão das classes e da organização em camadas, conferência dos testes automatizados |
+| Marcelo Fong | Validação do jogo: testes de jogabilidade no computador e no Android (cartas, chefe, ranking) |
 
 Ferramentas: o desenvolvimento contou com apoio de IA (Claude) para geração e revisão de código, registrado como
 coautor nos commits. Recursos de terceiros: modelos Kenney (CC0), fontes Orbitron e Rajdhani (OFL); sons e música
