@@ -44,6 +44,7 @@ Instruções específicas no README de cada fase.
 - [Design do jogo (modo sobrevivência)](docs/design-jogo.md)
 - [Relatório técnico](docs/relatorio-tecnico.md)
 - [Roteiro da apresentação e respostas](docs/roteiro-apresentacao.md)
+- [Retrospectiva da equipe](docs/retrospectiva.md)
 - **APK Android:** página *Releases* do repositório
 
 ## Segurança

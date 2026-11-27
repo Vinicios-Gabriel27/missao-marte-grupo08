@@ -263,7 +263,8 @@ class Hud {
             y -= 26;
         }
         List<Passageiro> bordo = nave.passageirosABordo();
-        float yp = 40 + 26 * bordo.size();
+        // no celular o canto inferior direito é do botão DASH: a lista sobe para acima dele
+        float yp = (ControleToque.telaDeToque() ? 250 : 40) + 26 * bordo.size();
         if (!bordo.isEmpty()) {
             Ui.texto(b, fo.subtitulo, "A BORDO", w - 22, yp + 30, Align.right, Ui.CIANO);
         }

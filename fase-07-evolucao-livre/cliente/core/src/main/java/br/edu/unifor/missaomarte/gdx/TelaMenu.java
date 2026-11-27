@@ -55,6 +55,9 @@ public class TelaMenu extends ScreenAdapter {
     private int selecionado;
     private int dificuldade = 1;
     private boolean editandoNome;
+    /** No celular: teclado aberto num campo da conta (mostra a caixa de digitação no topo). */
+    private boolean tecladoConta;
+    private final Botao okTeclado = new Botao("OK");
     private float tempo;
     private final InputAdapter entradaTexto = new InputAdapter() {
         @Override
@@ -161,8 +164,13 @@ public class TelaMenu extends ScreenAdapter {
             return;
         }
         if (editandoNome) {
+            okTeclado.em(Ui.largura() - 200, Ui.ALTURA - 110, 160, 60);
+            okTeclado.atualizar(delta, true);
+            boolean tocouFora = ControleToque.telaDeToque()
+                    ? Gdx.input.justTouched() && okTeclado.mouseSobre()
+                    : Gdx.input.justTouched() && !botoes[PILOTO].mouseSobre();
             if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)
-                    || (Gdx.input.justTouched() && !botoes[PILOTO].mouseSobre())) {
+                    || Gdx.input.isKeyJustPressed(Input.Keys.BACK) || tocouFora) {
                 editandoNome = false;
                 Gdx.input.setOnscreenKeyboardVisible(false);
                 jogo.sons().tocar("clique", 0.6f);
@@ -189,7 +197,16 @@ public class TelaMenu extends ScreenAdapter {
                 selecionado = i;
             }
         }
-        boolean clicou = Gdx.input.justTouched() && botoes[selecionado].mouseSobre();
+        // toque (ou clique) em qualquer botão aciona direto, sem precisar "passar o mouse" antes
+        boolean clicou = false;
+        if (Gdx.input.justTouched()) {
+            for (int i = 0; i < botoes.length; i++) {
+                if (botoes[i].mouseSobre()) {
+                    selecionado = i;
+                    clicou = true;
+                }
+            }
+        }
         if (clicou || Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             acionar(selecionado);
         }
@@ -262,11 +279,23 @@ public class TelaMenu extends ScreenAdapter {
         criarConta.em(x + 240, 180, 220, 46);
         sairConta.em(x, 180, 460, 46);
         voltar.em(w / 2 - 100, 92, 200, 44);
+        if (digitandoNoCelular()) {
+            // com o teclado aberto, só a caixa do topo responde: OK, Enter ou Voltar fecham o teclado
+            okTeclado.em(w - 200, Ui.ALTURA - 110, 160, 60);
+            okTeclado.atualizar(delta, true);
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || Gdx.input.isKeyJustPressed(Input.Keys.BACK)
+                    || (Gdx.input.justTouched() && okTeclado.mouseSobre())) {
+                fecharTeclado();
+            }
+            return;
+        }
         if (Gdx.input.justTouched()) {
             for (int i = 0; i < campos.length; i++) {
                 if (Ui.mouseSobre(campos[i].area)) {
                     campoFoco = i;
                     Gdx.input.setOnscreenKeyboardVisible(true);
+                    tecladoConta = ControleToque.telaDeToque();
+                    return;
                 }
             }
         }
@@ -288,10 +317,56 @@ public class TelaMenu extends ScreenAdapter {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) || Gdx.input.isKeyJustPressed(Input.Keys.BACK)
                 || (Gdx.input.justTouched() && voltar.mouseSobre())) {
             Gdx.input.setOnscreenKeyboardVisible(false);
+            tecladoConta = false;
             jogo.definirServidor(campoServidor.valor);
             painel = Painel.PRINCIPAL;
             jogo.sons().tocar("clique", 0.6f);
         }
+    }
+
+    private boolean digitandoNoCelular() {
+        return ControleToque.telaDeToque() && ((painel == Painel.CONTA && tecladoConta) || (painel == Painel.PRINCIPAL && editandoNome));
+    }
+
+    private void fecharTeclado() {
+        tecladoConta = false;
+        Gdx.input.setOnscreenKeyboardVisible(false);
+        jogo.sons().tocar("clique", 0.6f);
+    }
+
+    /**
+     * No celular o teclado cobre a metade de baixo da tela; então o campo em edição é mostrado
+     * grande numa caixa no topo, com um botão OK para fechar o teclado.
+     */
+    private void desenharCaixaDigitacao(Fontes fontes) {
+        float w = Ui.largura();
+        float h = Ui.ALTURA;
+        String rotulo;
+        String valor;
+        if (painel == Painel.CONTA) {
+            CampoTexto c = campos[campoFoco];
+            rotulo = c.rotulo;
+            valor = c.senha ? "•".repeat(c.valor.length()) : c.valor;
+        } else {
+            rotulo = "Nome do piloto";
+            valor = jogo.piloto();
+        }
+        String cursor = (int) (tempo * 2.5f) % 2 == 0 ? "_" : "";
+        ShapeRenderer f = jogo.formas();
+        Ui.comecarFormas(f);
+        f.setColor(0, 0, 0, 0.75f);
+        f.rect(0, 0, w, h);
+        Ui.painel(f, 30, h - 140, w - 60, 120, Ui.CIANO);
+        Ui.retanguloArredondado(f, 60, h - 110, w - 290, 60, 10, new Color(0.18f, 0.1f, 0.08f, 0.95f));
+        okTeclado.desenharFundo(f);
+        f.end();
+        SpriteBatch b = jogo.batch();
+        b.setProjectionMatrix(Ui.projecao());
+        b.begin();
+        Ui.texto(b, fontes.textoPequeno, rotulo.toUpperCase(), 64, h - 30, Align.left, Ui.CIANO);
+        Ui.texto(b, fontes.texto, valor + cursor, 80, h - 80 + fontes.texto.getCapHeight() / 2, Align.left, Color.WHITE);
+        okTeclado.desenharTexto(b, fontes.texto);
+        b.end();
     }
 
     private void acaoConta(boolean cadastrar) {
@@ -429,6 +504,9 @@ public class TelaMenu extends ScreenAdapter {
             voltar.desenharTexto(b, fontes.texto);
         }
         b.end();
+        if (digitandoNoCelular()) {
+            desenharCaixaDigitacao(fontes);
+        }
     }
 
     private void desenharRanking(SpriteBatch b, Fontes fontes, float w) {
