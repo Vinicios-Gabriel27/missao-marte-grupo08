@@ -1,0 +1,320 @@
+Starting a Gradle Daemon, 1 incompatible Daemon could not be reused, use --status for details
+
+> Task :core:compileJava
+Note: /home/runner/work/missao-marte-grupo08/missao-marte-grupo08/fase-07-evolucao-livre/cliente/core/src/main/java/br/edu/unifor/missaomarte/gdx/MissaoMarteJogo.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+
+> Task :core:processResources NO-SOURCE
+> Task :core:classes
+> Task :core:jar
+> Task :lwjgl3:compileJava
+> Task :lwjgl3:processResources
+> Task :lwjgl3:classes
+
+> Task :lwjgl3:run
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.lwjgl.system.MemoryUtil (file:/home/runner/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl/3.3.3/29589b5f87ed335a6c7e7ee6a5775f81f97ecb84/lwjgl-3.3.3.jar)
+WARNING: Please consider reporting this to the maintainers of class org.lwjgl.system.MemoryUtil
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+[LWJGL] [ThreadLocalUtil] Unsupported JNI version detected, this may result in a crash. Please inform LWJGL developers.
+ALSA lib confmisc.c:855:(parse_card) [error.core] cannot find card '0'
+ALSA lib conf.c:5211:(_snd_config_evaluate) [error.core] function snd_func_card_inum returned error: No such file or directory
+ALSA lib confmisc.c:422:(snd_func_concat) [error.core] error evaluating strings
+ALSA lib conf.c:5211:(_snd_config_evaluate) [error.core] function snd_func_concat returned error: No such file or directory
+ALSA lib confmisc.c:1342:(snd_func_refer) [error.core] error evaluating name
+ALSA lib conf.c:5211:(_snd_config_evaluate) [error.core] function snd_func_refer returned error: No such file or directory
+ALSA lib conf.c:5734:(snd_config_expand) [error.core] Evaluate error: No such file or directory
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) [error.pcm] Unknown PCM default
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 450 vertices, 240 indices.
+[GLTF] generate mesh: 118 vertices, 240 indices.
+[GLTF] mesh split: 1 meshes generated: 118 vertices, 240 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 450 vertices, 231 indices.
+[GLTF] generate mesh: 253 vertices, 231 indices.
+[GLTF] mesh split: 2 meshes generated: 253 vertices, 231 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 450 vertices, 78 indices.
+[GLTF] generate mesh: 307 vertices, 78 indices.
+[GLTF] mesh split: 3 meshes generated: 307 vertices, 78 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 450 vertices, 291 indices.
+[GLTF] generate mesh: 450 vertices, 291 indices.
+[GLTF] mesh split: 4 meshes generated: 450 vertices, 291 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 48 vertices, 42 indices.
+[GLTF] generate mesh: 26 vertices, 42 indices.
+[GLTF] mesh split: 1 meshes generated: 26 vertices, 42 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 48 vertices, 12 indices.
+[GLTF] generate mesh: 34 vertices, 12 indices.
+[GLTF] mesh split: 2 meshes generated: 34 vertices, 12 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 48 vertices, 30 indices.
+[GLTF] generate mesh: 48 vertices, 30 indices.
+[GLTF] mesh split: 3 meshes generated: 48 vertices, 30 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 48 vertices, 42 indices.
+[GLTF] generate mesh: 26 vertices, 42 indices.
+[GLTF] mesh split: 1 meshes generated: 26 vertices, 42 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 48 vertices, 30 indices.
+[GLTF] generate mesh: 40 vertices, 30 indices.
+[GLTF] mesh split: 2 meshes generated: 40 vertices, 30 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 48 vertices, 12 indices.
+[GLTF] generate mesh: 48 vertices, 12 indices.
+[GLTF] mesh split: 3 meshes generated: 48 vertices, 12 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 106 vertices, 84 indices.
+[GLTF] generate mesh: 50 vertices, 84 indices.
+[GLTF] mesh split: 1 meshes generated: 50 vertices, 84 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 106 vertices, 66 indices.
+[GLTF] generate mesh: 84 vertices, 66 indices.
+[GLTF] mesh split: 2 meshes generated: 84 vertices, 66 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 106 vertices, 66 indices.
+[GLTF] generate mesh: 106 vertices, 66 indices.
+[GLTF] mesh split: 3 meshes generated: 106 vertices, 66 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 124 vertices, 192 indices.
+[GLTF] generate mesh: 88 vertices, 192 indices.
+[GLTF] mesh split: 1 meshes generated: 88 vertices, 192 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 124 vertices, 102 indices.
+[GLTF] generate mesh: 124 vertices, 102 indices.
+[GLTF] mesh split: 2 meshes generated: 124 vertices, 102 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 124 vertices, 18 indices.
+[GLTF] generate mesh: 88 vertices, 18 indices.
+[GLTF] mesh split: 3 meshes generated: 88 vertices, 18 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 54 vertices, 30 indices.
+[GLTF] generate mesh: 20 vertices, 30 indices.
+[GLTF] mesh split: 1 meshes generated: 20 vertices, 30 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 54 vertices, 60 indices.
+[GLTF] generate mesh: 50 vertices, 60 indices.
+[GLTF] mesh split: 2 meshes generated: 50 vertices, 60 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 54 vertices, 6 indices.
+[GLTF] generate mesh: 54 vertices, 6 indices.
+[GLTF] mesh split: 3 meshes generated: 54 vertices, 6 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 54 vertices, 60 indices.
+[GLTF] generate mesh: 34 vertices, 60 indices.
+[GLTF] mesh split: 1 meshes generated: 34 vertices, 60 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 54 vertices, 30 indices.
+[GLTF] generate mesh: 50 vertices, 30 indices.
+[GLTF] mesh split: 2 meshes generated: 50 vertices, 30 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 54 vertices, 6 indices.
+[GLTF] generate mesh: 54 vertices, 6 indices.
+[GLTF] mesh split: 3 meshes generated: 54 vertices, 6 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 96 vertices, 120 indices.
+[GLTF] generate mesh: 56 vertices, 120 indices.
+[GLTF] mesh split: 1 meshes generated: 56 vertices, 120 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 96 vertices, 60 indices.
+[GLTF] generate mesh: 72 vertices, 60 indices.
+[GLTF] mesh split: 2 meshes generated: 72 vertices, 60 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 96 vertices, 48 indices.
+[GLTF] generate mesh: 96 vertices, 48 indices.
+[GLTF] mesh split: 3 meshes generated: 96 vertices, 48 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 288 vertices, 450 indices.
+[GLTF] generate mesh: 256 vertices, 450 indices.
+[GLTF] mesh split: 1 meshes generated: 256 vertices, 450 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 288 vertices, 66 indices.
+[GLTF] generate mesh: 288 vertices, 66 indices.
+[GLTF] mesh split: 2 meshes generated: 288 vertices, 66 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 288 vertices, 447 indices.
+[GLTF] generate mesh: 251 vertices, 447 indices.
+[GLTF] mesh split: 1 meshes generated: 251 vertices, 447 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 288 vertices, 81 indices.
+[GLTF] generate mesh: 288 vertices, 81 indices.
+[GLTF] mesh split: 2 meshes generated: 288 vertices, 81 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 282 vertices, 432 indices.
+[GLTF] generate mesh: 244 vertices, 432 indices.
+[GLTF] mesh split: 1 meshes generated: 244 vertices, 432 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 282 vertices, 84 indices.
+[GLTF] generate mesh: 282 vertices, 84 indices.
+[GLTF] mesh split: 2 meshes generated: 282 vertices, 84 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 120 vertices, 180 indices.
+[GLTF] generate mesh: 120 vertices, 180 indices.
+[GLTF] mesh split: 1 meshes generated: 120 vertices, 180 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 96 vertices, 144 indices.
+[GLTF] generate mesh: 96 vertices, 144 indices.
+[GLTF] mesh split: 1 meshes generated: 96 vertices, 144 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 324 vertices, 588 indices.
+[GLTF] generate mesh: 324 vertices, 588 indices.
+[GLTF] mesh split: 1 meshes generated: 324 vertices, 588 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 576 vertices, 594 indices.
+[GLTF] generate mesh: 288 vertices, 594 indices.
+[GLTF] mesh split: 1 meshes generated: 288 vertices, 594 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 576 vertices, 138 indices.
+[GLTF] generate mesh: 336 vertices, 138 indices.
+[GLTF] mesh split: 2 meshes generated: 336 vertices, 138 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 576 vertices, 360 indices.
+[GLTF] generate mesh: 576 vertices, 360 indices.
+[GLTF] mesh split: 3 meshes generated: 576 vertices, 360 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 600 vertices, 609 indices.
+[GLTF] generate mesh: 287 vertices, 609 indices.
+[GLTF] mesh split: 1 meshes generated: 287 vertices, 609 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 600 vertices, 153 indices.
+[GLTF] generate mesh: 340 vertices, 153 indices.
+[GLTF] mesh split: 2 meshes generated: 340 vertices, 153 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 600 vertices, 390 indices.
+[GLTF] generate mesh: 600 vertices, 390 indices.
+[GLTF] mesh split: 3 meshes generated: 600 vertices, 390 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 96 vertices, 36 indices.
+[GLTF] generate mesh: 24 vertices, 36 indices.
+[GLTF] mesh split: 1 meshes generated: 24 vertices, 36 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 96 vertices, 144 indices.
+[GLTF] generate mesh: 96 vertices, 144 indices.
+[GLTF] mesh split: 2 meshes generated: 96 vertices, 144 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 96 vertices, 66 indices.
+[GLTF] generate mesh: 40 vertices, 66 indices.
+[GLTF] mesh split: 1 meshes generated: 40 vertices, 66 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 96 vertices, 114 indices.
+[GLTF] generate mesh: 96 vertices, 114 indices.
+[GLTF] mesh split: 2 meshes generated: 96 vertices, 114 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 230 vertices, 36 indices.
+[GLTF] generate mesh: 24 vertices, 36 indices.
+[GLTF] mesh split: 1 meshes generated: 24 vertices, 36 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 230 vertices, 129 indices.
+[GLTF] generate mesh: 81 vertices, 129 indices.
+[GLTF] mesh split: 2 meshes generated: 81 vertices, 129 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 230 vertices, 297 indices.
+[GLTF] generate mesh: 218 vertices, 297 indices.
+[GLTF] mesh split: 3 meshes generated: 218 vertices, 297 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 230 vertices, 36 indices.
+[GLTF] generate mesh: 230 vertices, 36 indices.
+[GLTF] mesh split: 4 meshes generated: 230 vertices, 36 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 292 vertices, 264 indices.
+[GLTF] generate mesh: 152 vertices, 264 indices.
+[GLTF] mesh split: 1 meshes generated: 152 vertices, 264 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 292 vertices, 213 indices.
+[GLTF] generate mesh: 255 vertices, 213 indices.
+[GLTF] mesh split: 2 meshes generated: 255 vertices, 213 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 292 vertices, 81 indices.
+[GLTF] generate mesh: 292 vertices, 81 indices.
+[GLTF] mesh split: 3 meshes generated: 292 vertices, 81 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 898 vertices, 318 indices.
+[GLTF] generate mesh: 160 vertices, 318 indices.
+[GLTF] mesh split: 1 meshes generated: 160 vertices, 318 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 898 vertices, 1200 indices.
+[GLTF] generate mesh: 760 vertices, 1200 indices.
+[GLTF] mesh split: 2 meshes generated: 760 vertices, 1200 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 898 vertices, 654 indices.
+[GLTF] generate mesh: 898 vertices, 654 indices.
+[GLTF] mesh split: 3 meshes generated: 898 vertices, 654 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 228 vertices, 162 indices.
+[GLTF] generate mesh: 72 vertices, 162 indices.
+[GLTF] mesh split: 1 meshes generated: 72 vertices, 162 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 228 vertices, 30 indices.
+[GLTF] generate mesh: 92 vertices, 30 indices.
+[GLTF] mesh split: 2 meshes generated: 92 vertices, 30 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 228 vertices, 264 indices.
+[GLTF] generate mesh: 228 vertices, 264 indices.
+[GLTF] mesh split: 3 meshes generated: 228 vertices, 264 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 268 vertices, 234 indices.
+[GLTF] generate mesh: 150 vertices, 234 indices.
+[GLTF] mesh split: 1 meshes generated: 150 vertices, 234 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 268 vertices, 138 indices.
+[GLTF] generate mesh: 222 vertices, 138 indices.
+[GLTF] mesh split: 2 meshes generated: 222 vertices, 138 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 268 vertices, 66 indices.
+[GLTF] generate mesh: 236 vertices, 66 indices.
+[GLTF] mesh split: 3 meshes generated: 236 vertices, 66 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 268 vertices, 78 indices.
+[GLTF] generate mesh: 268 vertices, 78 indices.
+[GLTF] mesh split: 4 meshes generated: 268 vertices, 78 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 186 vertices, 93 indices.
+[GLTF] generate mesh: 47 vertices, 93 indices.
+[GLTF] mesh split: 1 meshes generated: 47 vertices, 93 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 186 vertices, 24 indices.
+[GLTF] generate mesh: 61 vertices, 24 indices.
+[GLTF] mesh split: 2 meshes generated: 61 vertices, 24 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 186 vertices, 120 indices.
+[GLTF] generate mesh: 127 vertices, 120 indices.
+[GLTF] mesh split: 3 meshes generated: 127 vertices, 120 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 186 vertices, 141 indices.
+[GLTF] generate mesh: 186 vertices, 141 indices.
+[GLTF] mesh split: 4 meshes generated: 186 vertices, 141 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 276 vertices, 336 indices.
+[GLTF] generate mesh: 168 vertices, 336 indices.
+[GLTF] mesh split: 1 meshes generated: 168 vertices, 336 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 276 vertices, 168 indices.
+[GLTF] generate mesh: 241 vertices, 168 indices.
+[GLTF] mesh split: 2 meshes generated: 241 vertices, 168 indices.
+[GLTF] integer indices partially supported, mesh will be split
+[GLTF] splitting mesh: 276 vertices, 192 indices.
+[GLTF] generate mesh: 276 vertices, 192 indices.
+[GLTF] mesh split: 3 meshes generated: 276 vertices, 192 indices.
+[DEMO] captura-menu.png salva
+[DEMO] captura-conta.png salva
+[DEMO] captura-ranking-global.png salva
+[DEMO] captura-0.png salva
+[DEMO] captura-1.png salva
+[DEMO] captura-2.png salva
+[DEMO] captura-cartas.png salva
+[DEMO] captura-3.png salva
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_3-1795747995352.json
+
+[Incubating] Problems report is available at: file:///home/runner/work/missao-marte-grupo08/missao-marte-grupo08/fase-07-evolucao-livre/cliente/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.8.2/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 1m 5s
+5 actionable tasks: 5 executed
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.8.2/userguide/configuration_cache_enabling.html
